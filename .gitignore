@@ -1,0 +1,32 @@
+# .gitignore para un proyecto Django
+
+# Entornos virtuales
+env/
+venv/
+.venv/
+
+# Archivos de base de datos SQLite
+*.sqlite3
+
+# Archivos generados por Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de migraciones generados localmente (opcional, si prefieres versionar migraciones)
+migrations/
+
+# Nota: Descomenta la línea anterior solo si quieres excluir migraciones
+
+# Archivos de medios y subidas (media y static en producción)
+media/  
+
+# Archivos de logs
+*.log
+
+# Archivos de IDE y editores
+.idea/          # PyCharm
+*.sublime-workspace
+*.sublime-project
+.vscode/
+*.swp
