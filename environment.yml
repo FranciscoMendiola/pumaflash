@@ -5,11 +5,11 @@ channels:
 dependencies:
   - python=3.10.0
   - pip
+  - pillow  # Agregado aquí
   - pip:
       - django==4.1.6
       - django-crispy-forms==1.14.0
       - django-environ==0.9.0
-
 
 
 # Para definir la ruta de instalación del entorno

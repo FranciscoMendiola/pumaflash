@@ -36,21 +36,10 @@ conda env create -f environment.yml
 conda activate pumaflash
 ```
 
-### 3. Configurar entorno
-
-Crea un archivo `.env` en la raíz del proyecto con la configuración necesaria. Ejemplo:
-
-```env
-DEBUG=True
-SECRET_KEY=tu_clave_secreta
-DATABASE_URL=mysql://usuario:contraseña@localhost:3306/pumaflash
-```
-
-Si no usas MySQL, puedes omitir `DATABASE_URL` para utilizar SQLite por defecto.
-
 ### 4. Aplicar migraciones y ejecutar servidor
 
 ```bash
+python3 manage.py makemigrations APP
 python manage.py migrate
 python manage.py runserver
 ```
