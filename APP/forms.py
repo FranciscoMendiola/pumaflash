@@ -1,20 +1,47 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from .models import Usuario
 
-class nameForm(forms.Form):
-    '''
-    Como los 3 son filtro entonces les agregamos la propiedad de que no sean obligatorios para hacer submit
-    '''
-    numcta = forms.CharField(label='numcta', max_length=100, required=False)
-    nombre = forms.CharField(label='nombre', max_length=100, required=False)
-    apellido = forms.CharField(label='apellido', max_length=100, required=False)
+# Bibliotecas del video de César
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class UsuarioForm(forms.ModelForm):
+    '''
+    Formulario basado en el modelo Usuario para la creación de un usuario
+    '''
+    # Parámetro extra agregado al formulario un campo para contraseña 
+    # (al usar el wideget PasswordInput() en el html se pondrá "censurada" por defecto, es decir de tipo password)
+    confirma_contraseña = forms.CharField(widget=forms.PasswordInput(), label="Confirmar Contraseña")
+
     class Meta:
         model = Usuario
-        fields = ['nombre', 'apellido_paterno', 'apellido_materno', 'correo', 'password', 'img_url']
+        fields = ['nombre', 'apellido_paterno', 'apellido_materno', 'correo', 'contraseña', 'confirma_contraseña', 'img_url']
         widgets = {
-            'password': forms.PasswordInput()
+            'contraseña': forms.PasswordInput(),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        contraseña = cleaned_data.get("contraseña")
+        confirma_contraseña = cleaned_data.get("confirma_contraseña")
+        correo = cleaned_data.get("correo")
+
+        if contraseña and confirma_contraseña and contraseña != confirma_contraseña:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+        if Usuario.objects.filter(correo=correo).exists():
+            raise forms.ValidationError("Este correo ya está registrado.")
+
+class loginForm(forms.Form):
+    '''
+    Formulario para obtener los datos de inicio de sesión de un usuario
+    '''
+    correo = forms.EmailField(label="Correo", required=True)
+    contraseña = forms.CharField(label="Contraseña", widget=forms.PasswordInput(), required=True)
+
+    def clean_correo(self):
+        correo = self.cleaned_data.get('correo')
+        if not correo:  # Validación personalizada
+            raise forms.ValidationError("Por favor ingrese un correo.")
+        if "@" not in correo:
+            raise forms.ValidationError("El correo no tiene un formato válido.")
+        return correo
