@@ -1,109 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro/Login</title>
-  <!-- Font Awesome (para los iconos) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- MDBootstrap CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
-</head>
-<body>
-  <div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card p-4 shadow-4" style="width: 100%; max-width: 600px;">
-      <!-- Pills navs -->
-      <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-        <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="tab-login" data-mdb-toggle="pill" href="#pills-login" role="tab"
-            aria-controls="pills-login" aria-selected="true">Iniciar Sesión</a>
-        </li>
-        <li class="nav-item" role="presentation">
-          <a class="nav-link" id="tab-register" data-mdb-toggle="pill" href="#pills-register" role="tab"
-            aria-controls="pills-register" aria-selected="false">Registrarse</a>
-        </li>
-      </ul>
-      <!-- Pills navs -->
+<form method="POST" action="{% url 'index' %}" enctype="multipart/form-data">
+  <!-- Etiqueta oculta para diferencias los distintos post -->
+  <input type="hidden" name="tipoFormulario" value="register">
+  {% csrf_token %}
 
-      <!-- Pills content -->
-      <div class="tab-content">
-        <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
-          <form>
-            <!-- Email input -->
-            <div data-mdb-input-init class="form-outline mb-4">
-				<input type="email" id="registerEmail" name="correo" class="form-control" />
-				<label class="form-label" for="registerEmail">Correo</label>
-            </div>
-
-            <!-- Password input -->
-            <div data-mdb-input-init class="form-outline mb-4">
-              <input type="password" id="loginPassword" class="form-control" />
-              <label class="form-label" for="loginPassword">Contraseña</label>
-            </div>
-
-            <!-- Submit button -->
-            <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Iniciar Sesión</button>
-          </form>
-        </div>
-        <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-          <form method="POST" action="{% url 'signup' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <!-- Nombre input -->
-            <div data-mdb-input-init class="form-outline mb-4">
-              <input type="text" id="registerName" name="nombre" class="form-control" />
-              <label class="form-label" for="registerName">Nombre</label>
-            </div>
-
-            <!-- Apellido Paterno input -->
-            <div data-mdb-input-init class="form-outline mb-4">
-              <input type="text" id="apPat" name="apellido_paterno" class="form-control" />
-              <label class="form-label" for="apPat">Apellido Paterno</label>
-            </div>
-
-            <!-- Apellido Materno input -->
-            <div data-mdb-input-init class="form-outline mb-4">
-              <input type="text" id="apMat" name="apellido_materno" class="form-control" />
-              <label class="form-label" for="apMat">Apellido Materno</label>
-            </div>
-
-            <!-- Email input -->
-            <div data-mdb-input-init class="form-outline mb-4">
-              <input type="email" id="registerEmail" name="correo" class="form-control" />
-              <label class="form-label" for="registerEmail">Correo</label>
-            </div>
-
-            <!-- Password input -->
-            <div data-mdb-input-init class="form-outline mb-4">
-              <input type="password" id="registerPassword" name="password" class="form-control" />
-              <label class="form-label" for="registerPassword">Contraseña</label>
-            </div>
-
-            
-
-			<!-- Imagen input -->
-			<div class="mb-4">
-				<label for="img_url" class="form-label">Foto de perfil</label>
-				<input class="form-control" type="file" id="img_url" name="img_url" accept="image/*">
-			</div>
-
-           
-
-            <!-- Submit button -->
-            <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3">Registrarse</button>
-          </form>
-        </div>
+  <!-- Impresión de errores referentes al formulario de registro (como campos vacíos o mal escritos)-->
+  {% if form.errors %}
+  {% for error in form.non_field_errors %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endfor %}
+  {% for field in form %}
+    {% for error in field.errors %}
+      <div class="alert alert-danger">
+        <strong>{{ field.label }}:</strong> {{ error }}
       </div>
-      <!-- Pills content -->
-    </div>
+    {% endfor %}
+  {% endfor %}
+{% endif %}
+
+  <!-- Nombre input -->
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="text" id="registerName" name="nombre" class="form-control" />
+    <label class="form-label" for="registerName">Nombre</label>
   </div>
 
-  <!-- MDBootstrap JS -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const tabElements = document.querySelectorAll('[data-mdb-pill-init]');
-      tabElements.forEach(el => new mdb.Tab(el));
-    });
-  </script>
-</body>
-</html>
+  <!-- Apellido Paterno input -->
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="text" id="apPat" name="apellido_paterno" class="form-control" />
+    <label class="form-label" for="apPat">Apellido Paterno</label>
+  </div>
+
+  <!-- Apellido Materno input -->
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="text" id="apMat" name="apellido_materno" class="form-control" />
+    <label class="form-label" for="apMat">Apellido Materno</label>
+  </div>
+
+  <!-- Email input -->
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="email" id="registerEmail" name="correo" class="form-control" />
+    <label class="form-label" for="registerEmail">Correo</label>
+  </div>
+  
+
+<!-- Imagen input -->
+<div class="mb-4">
+<label for="img_url" class="form-label">Foto de perfil</label>
+<input class="form-control" type="file" id="img_url" name="img_url" accept="image/*">
+</div>
+
+ <!-- Password input -->
+ <div data-mdb-input-init class="form-outline mb-4">
+  <input type="password" id="registerPassword" name="contraseña" class="form-control" />
+  <label class="form-label" for="registerPassword">Contraseña</label>
+</div>
+
+  <!-- Confirmar Contraseña -->
+<div data-mdb-input-init class="form-outline mb-4">
+  <input type="password" id="confirmPassword" name="confirma_contraseña" class="form-control" />
+  <label class="form-label" for="confirmPassword">Repetir Contraseña</label>
+</div>
+
+  <!-- Submit button -->
+  <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3">Registrarse</button>
+</form>
