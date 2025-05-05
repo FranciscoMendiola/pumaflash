@@ -7,7 +7,7 @@ class Usuario(models.Model):
     apellido_materno = models.CharField(max_length=50)
     apellido_paterno = models.CharField(max_length=50)
     correo = models.EmailField(max_length=80)
-    password = models.TextField()
+    contraseña = models.TextField()
     img_url = models.ImageField(upload_to='img/usuarios', default='img/usuarios/default.png')
     is_admin = models.BooleanField(default=False)
 
