@@ -20,16 +20,21 @@ class UsuarioForm(forms.ModelForm):
             'contraseña': forms.PasswordInput(),
         }
 
-    def clean(self):
+    def clean(self): 
         cleaned_data = super().clean()
         contraseña = cleaned_data.get("contraseña")
+        if contraseña:
+            # Validación de la contraseña (mínimo 8 caracteres, al menos una letra y un número)
+            if len(contraseña) < 6:
+                raise forms.ValidationError("La contraseña debe tener al menos 6 caracteres.")
+
         confirma_contraseña = cleaned_data.get("confirma_contraseña")
         correo = cleaned_data.get("correo")
 
         if contraseña and confirma_contraseña and contraseña != confirma_contraseña:
             raise forms.ValidationError("Las contraseñas no coinciden.")
         if Usuario.objects.filter(correo=correo).exists():
-            raise forms.ValidationError("Este correo ya está registrado.")
+            raise forms.ValidationError("El correo ya está registrado.")
 
 class loginForm(forms.Form):
     '''
