@@ -17,29 +17,34 @@
   {% endfor %}
 {% endif %}
 
-  <!-- Nombre input -->
-  <div data-mdb-input-init class="form-outline mb-4">
-    <input type="text" id="registerName" name="nombre" class="form-control" />
-    <label class="form-label" for="registerName">Nombre(s)</label>
-  </div>
+<!-- Nombre input -->
+<div data-mdb-input-init class="form-outline mb-4">
+  <input type="text" id="registerName" name="nombre" class="form-control"
+         value="{{ form.data.nombre|default_if_none:'' }}" />
+  <label class="form-label" for="registerName">Nombre(s)</label>
+</div>
 
-  <!-- Apellido Paterno input -->
-  <div data-mdb-input-init class="form-outline mb-4">
-    <input type="text" id="apPat" name="apellido_paterno" class="form-control" />
-    <label class="form-label" for="apPat">Apellido Paterno</label>
-  </div>
+<!-- Apellido Paterno input -->
+<div data-mdb-input-init class="form-outline mb-4">
+  <input type="text" id="apPat" name="apellido_paterno" class="form-control"
+         value="{{ form.data.apellido_paterno|default_if_none:'' }}" />
+  <label class="form-label" for="apPat">Apellido Paterno</label>
+</div>
 
-  <!-- Apellido Materno input -->
-  <div data-mdb-input-init class="form-outline mb-4">
-    <input type="text" id="apMat" name="apellido_materno" class="form-control" />
-    <label class="form-label" for="apMat">Apellido Materno</label>
-  </div>
+<!-- Apellido Materno input -->
+<div data-mdb-input-init class="form-outline mb-4">
+  <input type="text" id="apMat" name="apellido_materno" class="form-control"
+         value="{{ form.data.apellido_materno|default_if_none:'' }}" />
+  <label class="form-label" for="apMat">Apellido Materno</label>
+</div>
 
-  <!-- Email input -->
-  <div data-mdb-input-init class="form-outline mb-4">
-    <input type="email" id="registerEmail" name="correo" class="form-control" />
-    <label class="form-label" for="registerEmail">Correo</label>
-  </div>
+<!-- Email input -->
+<div data-mdb-input-init class="form-outline mb-4">
+  <input type="email" id="registerEmail" name="correo" class="form-control"
+         value="{{ form.data.correo|default_if_none:'' }}" />
+  <label class="form-label" for="registerEmail">Correo</label>
+</div>
+
   
 
 <!-- Imagen input -->

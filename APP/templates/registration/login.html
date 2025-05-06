@@ -1,4 +1,4 @@
-<form method="POST" action="{% url 'index' %}"> <!-- Boton submit actualmente lleva a la url con nombre index -->
+<form method="POST" action="{% url 'index' %}"> <!-- Boton submit actualmente lleva a la url con nombre index-->
   {% csrf_token %}
 
     <!-- Mostrar errores del formulario -->
@@ -19,7 +19,8 @@
   <input type="hidden" name="tipoFormulario" value="login">
     <!-- Email input -->
     <div data-mdb-input-init class="form-outline mb-4">
-        <input type="email" id="registerEmail" name="correo" class="form-control" />
+      <input type="email" id="registerEmail" name="correo" class="form-control" 
+      value="{{ login_form.data.correo|default_if_none:'' }}" />
         <label class="form-label" for="registerEmail">Correo</label>
     </div>
 

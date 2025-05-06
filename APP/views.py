@@ -39,10 +39,10 @@ def login(request, data):
             usuario = Usuario.objects.get(correo=correo)
             if check_password(contraseña, usuario.contraseña):
                 
-                
                 ##################
                 #Acá va a ir todo lo que viene después del login, podrían hacer un render pasando el usuario o sus datos yo q sé ahí le ven uds
-                print("Login correcto")                
+                print("Login correcto, bienvenida ")
+                print(usuario.nombre)                
                 return redirect("index")
                 ##############
             else:
