@@ -24,9 +24,6 @@ def index(request):
             return login(request,data)
         elif tipoFormulario == "register":
             return registro(request, data)
-        else:
-            #Tipo de formulario no reconocido llega al index de nuevo
-            return render(request, 'index.html', data)
         
     return render(request, 'index.html', data)
 
@@ -52,7 +49,8 @@ def login(request, data):
     else:
         # Si el formulario no es correcto
         print("Formulario de login no válido")
-    
+
+    __get_first_error(formulario, request)
     # Re-renderizar el formulario con los errores de validación
     data["login_form"] = formulario
     data["active_tab"] = "login"
@@ -65,12 +63,26 @@ def registro(request, data):
         usuario.contraseña = make_password(formulario.cleaned_data['contraseña'])
         usuario.save()
         messages.success(request, "Registro exitoso")
-        return redirect("index")
     else:
+        __get_first_error(formulario, request)
         data["form"] = formulario
         data["active_tab"] = "register"
-        return render(request, "index.html", data)
-    
-    
+
+    return render(request, "index.html", data)
 
 
+# Función privada para obtener el primer mensaje de error del formulario
+def __get_first_error(form, request):
+    # Primero buscar errores de campo
+    for field_name, field_errors in form.errors.items():
+        if field_errors:
+            label = form.fields.get(field_name).label if field_name in form.fields else ""
+            message = f"{label}: {field_errors[0]}" if label else field_errors[0]
+            messages.error(request, message)
+            return message
+    # Si no hay errores de campo, buscar errores no asociados
+    if form.non_field_errors():
+        message = form.non_field_errors()[0]
+        messages.error(request, message)
+        return message
+    return None

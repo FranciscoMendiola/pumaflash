@@ -1,0 +1,14 @@
+.backgound_login {
+    background-image: url('../img/backgound/register_login.png');
+
+    background-size: cover;
+    /* Ajusta el tamaño de la imagen */
+    background-position: center;
+    /* Centra la imagen */
+}
+
+
+.required::after {
+    content: " *";
+    color: red;
+}

@@ -1,22 +1,12 @@
 <form method="POST" action="{% url 'index' %}"> <!-- Boton submit actualmente lleva a la url con nombre index-->
-  {% csrf_token %}
 
-    <!-- Mostrar errores del formulario -->
-    {% if login_form.errors %}
-    {% for error in login_form.non_field_errors %}
-      <div class="alert alert-danger">{{ error }}</div>
-    {% endfor %}
-    {% for field in login_form %}
-      {% for error in field.errors %}
-        <div class="alert alert-danger">
-          <strong>{{ field.label }}:</strong> {{ error }}
-        </div>
-      {% endfor %}
-    {% endfor %}
-  {% endif %}
-
-  
   <input type="hidden" name="tipoFormulario" value="login">
+
+  <div class="text-center mb-3">
+        <p>!Bienvenido a <strong>PumaFlash</strong>¡</p>
+  </div>
+
+  {% csrf_token %}
     <!-- Email input -->
     <div data-mdb-input-init class="form-outline mb-4">
       <input type="email" id="registerEmail" name="correo" class="form-control" 
@@ -25,9 +15,10 @@
     </div>
 
     <!-- Password input -->
-    <div data-mdb-input-init class="form-outline mb-4">
-      <input type="password" id="loginPassword" name="contraseña" class="form-control" />
+    <div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
+      <input type="password" id="loginPassword" name="contraseña" class="form-control password-input" />
       <label class="form-label" for="loginPassword">Contraseña</label>
+      <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
     </div>
 
     <!-- Submit button -->

@@ -1,51 +1,56 @@
 <form method="POST" action="{% url 'index' %}" enctype="multipart/form-data">
   <!-- Etiqueta oculta para diferencias los distintos post -->
   <input type="hidden" name="tipoFormulario" value="register">
+
+  <div class="text-center mb-3">
+        <p>Ingresa tus datos para registrarte en <strong>PumaFlash</strong></p>
+  </div>
+
   {% csrf_token %}
-
-  <!-- Impresión de errores referentes al formulario de registro (como campos vacíos o mal escritos)-->
-  {% if form.errors %}
-  {% for error in form.non_field_errors %}
-    <div class="alert alert-danger">{{ error }}</div>
-  {% endfor %}
-  {% for field in form %}
-    {% for error in field.errors %}
-      <div class="alert alert-danger">
-        <strong>{{ field.label }}:</strong> {{ error }}
-      </div>
-    {% endfor %}
-  {% endfor %}
-{% endif %}
-
 <!-- Nombre input -->
 <div data-mdb-input-init class="form-outline mb-4">
   <input type="text" id="registerName" name="nombre" class="form-control"
          value="{{ form.data.nombre|default_if_none:'' }}" />
-  <label class="form-label" for="registerName">Nombre(s)</label>
+  <label class="form-label required required" for="registerName">Nombre(s)</label>
+
 </div>
 
 <!-- Apellido Paterno input -->
 <div data-mdb-input-init class="form-outline mb-4">
   <input type="text" id="apPat" name="apellido_paterno" class="form-control"
          value="{{ form.data.apellido_paterno|default_if_none:'' }}" />
-  <label class="form-label" for="apPat">Apellido Paterno</label>
+  <label class="form-label required" for="apPat">Apellido Paterno</label>
 </div>
 
 <!-- Apellido Materno input -->
 <div data-mdb-input-init class="form-outline mb-4">
   <input type="text" id="apMat" name="apellido_materno" class="form-control"
          value="{{ form.data.apellido_materno|default_if_none:'' }}" />
-  <label class="form-label" for="apMat">Apellido Materno</label>
+  <label class="form-label required" for="apMat">Apellido Materno</label>
 </div>
 
 <!-- Email input -->
 <div data-mdb-input-init class="form-outline mb-4">
   <input type="email" id="registerEmail" name="correo" class="form-control"
          value="{{ form.data.correo|default_if_none:'' }}" />
-  <label class="form-label" for="registerEmail">Correo</label>
+  <label class="form-label required" for="registerEmail">Correo</label>
 </div>
 
-  
+ <!-- Password input -->
+ <div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
+  <input type="password" id="registerPassword" name="contraseña" class="form-control password-input"/>
+  <label class="form-label required" for="registerPassword">Contraseña</label>
+  <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
+
+</div>
+
+  <!-- Confirmar Contraseña -->
+<div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
+  <input type="password" id="confirmPassword" name="confirma_contraseña" class="form-control password-input"/>
+  <label class="form-label required" for="confirmPassword">Repetir Contraseña</label>
+  <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
+
+</div>
 
 <!-- Imagen input -->
 <div class="mb-4">
@@ -53,18 +58,11 @@
 <input class="form-control" type="file" id="img_url" name="img_url" accept="image/*">
 </div>
 
- <!-- Password input -->
- <div data-mdb-input-init class="form-outline mb-4">
-  <input type="password" id="registerPassword" name="contraseña" class="form-control" />
-  <label class="form-label" for="registerPassword">Contraseña</label>
-</div>
+<!-- Fecha de nacimiento input -->
 
-  <!-- Confirmar Contraseña -->
-<div data-mdb-input-init class="form-outline mb-4">
-  <input type="password" id="confirmPassword" name="confirma_contraseña" class="form-control" />
-  <label class="form-label" for="confirmPassword">Repetir Contraseña</label>
+<div class="required text-start mb-2">
+  Datos obligatorios
 </div>
-
   <!-- Submit button -->
   <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3">Registrarse</button>
 </form>
