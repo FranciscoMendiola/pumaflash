@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación de Código - Anuario</title>
+
+  <!-- Font Awesome (para los íconos) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- MDBootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
+  
+  <!-- Tus estilos -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  {% block injected_css %}
+    <link rel="stylesheet" href="{% static 'css/register_login.css' %}">
+  {% endblock %}
+</head>
+<body>
+
+{% block content %}
+<div class="backgound_login">
+  <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card p-4 shadow-4 text-center" style="width: 100%; max-width: 600px;">
+
+      <!-- Título -->
+      <h2 class="fw-bold mb-4">Verifica tu código</h2>
+      <p class="text-muted mb-4">Si no tienes código, solicítalo a tu profesor</p>
+
+      <!-- Formulario -->
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <input type="text" name="code" class="form-control" placeholder="Código" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block w-100 mb-3">Enviar</button>
+
+        {% if messages %}
+          <div class="text-start">
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </form>
+
+      <!-- Resultados del grupo -->
+      {% if grupo %}
+        <hr>
+        {% if grupo.nombre %}
+          <p><strong>Nombre:</strong> {{ grupo.nombre }}</p>
+          <p><strong>Código:</strong> {{ grupo.code }}</p>
+          <a href="{% url 'prueba' groupcode.nombre %}" class="btn btn-primary mt-2">Ver más</a>
+        {% else %}
+          <p><strong>Código:</strong> {{ grupo.code }}</p>
+          <p class="text-warning">Este código no tiene nombre asignado.</p>
+        {% endif %}
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- JS de MDBootstrap -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+
+<!-- Font Awesome (íconos) -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<!-- JS personalizado -->
+<script src="{% static 'js/scripts.js' %}"></script>
+{% block injected_js %}
+  <script src="{% static 'js/register_login.js' %}"></script>
+{% endblock %}
+</body>
+</html>
+

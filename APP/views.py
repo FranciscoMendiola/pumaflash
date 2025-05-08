@@ -1,4 +1,5 @@
-
+from django.contrib.auth.decorators import login_required
+import random, string  # Esto debe estar importado para usar en generar_codigo_unico
 from django.shortcuts import HttpResponse
 from django.shortcuts import render, redirect
 from APP.models import Usuario
@@ -35,13 +36,12 @@ def login(request, data):
         try:
             usuario = Usuario.objects.get(correo=correo)
             if check_password(contraseña, usuario.contraseña):
-                
-                ##################
-                #Acá va a ir todo lo que viene después del login, podrían hacer un render pasando el usuario o sus datos yo q sé ahí le ven uds
-                print("Login correcto, bienvenida ")
-                print(usuario.nombre)                
-                return redirect("index")
-                ##############
+                request.session['usuario_id'] = usuario.id_usuario
+                # Redirección por rol
+                if usuario.is_admin:
+                    return redirect('generator')
+                else:
+                    return redirect('groups')
             else:
                 messages.error(request, "Contraseña incorrecta")
         except Usuario.DoesNotExist:
@@ -70,6 +70,56 @@ def registro(request, data):
 
     return render(request, "index.html", data)
 
+def groups(request):
+    if request.method == 'POST':
+        code = request.POST.get('code', '').strip().upper()
+
+        try:
+            grupo = Grupo.objects.get(codigo=code)
+            messages.success(request, 'Código válido. Acceso concedido.')
+            return redirect('prueba', nombre=grupo.nombre)  
+        except Grupo.DoesNotExist:
+            messages.error(request, 'Código inválido. Verifica con tu profesor.')
+
+    return render(request, 'groups.html')
+
+def generar_codigo_unico():
+    while True:
+        codigo = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+        if not Grupo.objects.filter(codigo=codigo).exists():
+            return codigo
+
+def generator(request):
+    codigo_generado = None
+
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')  # debe venir del form
+
+        if nombre and descripcion:
+            codigo = generar_codigo_unico()
+            nuevo = Grupo(
+                nombre=nombre,
+                descripcion=descripcion,
+                codigo=codigo,
+                id_admin= request.user #-------------------> No me jala esto por algo de como se define el id admin unu
+            )
+            nuevo.save()
+            codigo_generado = codigo
+
+    codigos = Grupo.objects.all().order_by('-id_grupo')
+
+    return render(request, 'generator.html', {
+        'codigo_generado': codigo_generado,
+        'codigos': codigos
+    })
+
+@login_required(login_url='/')  # o donde esté tu login
+def redireccion_por_rol(request):
+    if Grupo.objects.filter(id_admin=request.user).exists():
+        return redirect('generator')
+    else:
+        return redirect('groups')
 
 # Función privada para obtener el primer mensaje de error del formulario
 def __get_first_error(form, request):
