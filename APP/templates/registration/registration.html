@@ -9,36 +9,35 @@
   {% csrf_token %}
 <!-- Nombre input -->
 <div data-mdb-input-init class="form-outline mb-4">
-  <input type="text" id="registerName" name="nombre" class="form-control"
-         value="{{ form.data.nombre|default_if_none:'' }}" />
+  <input type="text" id="registerName" name="name" class="form-control"
+         value="{{ user_form.data.name|default_if_none:'' }}" />
   <label class="form-label required required" for="registerName">Nombre(s)</label>
-
 </div>
 
 <!-- Apellido Paterno input -->
 <div data-mdb-input-init class="form-outline mb-4">
-  <input type="text" id="apPat" name="apellido_paterno" class="form-control"
-         value="{{ form.data.apellido_paterno|default_if_none:'' }}" />
-  <label class="form-label required" for="apPat">Apellido Paterno</label>
+  <input type="text" id="apPat" name="first_name" class="form-control"
+         value="{{ user_form.data.first_name|default_if_none:'' }}" />
+  <label class="form-label required" for="apPat">Apellido paterno</label>
 </div>
 
 <!-- Apellido Materno input -->
 <div data-mdb-input-init class="form-outline mb-4">
-  <input type="text" id="apMat" name="apellido_materno" class="form-control"
-         value="{{ form.data.apellido_materno|default_if_none:'' }}" />
-  <label class="form-label required" for="apMat">Apellido Materno</label>
+  <input type="text" id="apMat" name="last_name" class="form-control"
+         value="{{ user_form.data.last_name|default_if_none:'' }}" />
+  <label class="form-label required" for="apMat">Apellido materno</label>
 </div>
 
 <!-- Email input -->
 <div data-mdb-input-init class="form-outline mb-4">
-  <input type="email" id="registerEmail" name="correo" class="form-control"
-         value="{{ form.data.correo|default_if_none:'' }}" />
+  <input type="email" id="registerEmail" name="email" class="form-control"
+         value="{{ user_form.data.email|default_if_none:'' }}" />
   <label class="form-label required" for="registerEmail">Correo</label>
 </div>
 
  <!-- Password input -->
  <div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
-  <input type="password" id="registerPassword" name="contraseña" class="form-control password-input"/>
+  <input type="password" id="registerPassword" name="password" class="form-control password-input"/>
   <label class="form-label required" for="registerPassword">Contraseña</label>
   <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
 
@@ -46,15 +45,15 @@
 
   <!-- Confirmar Contraseña -->
 <div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
-  <input type="password" id="confirmPassword" name="confirma_contraseña" class="form-control password-input"/>
-  <label class="form-label required" for="confirmPassword">Repetir Contraseña</label>
+  <input type="password" id="confirmPassword" name="confirm_password" class="form-control password-input"/>
+  <label class="form-label required" for="confirmPassword">Confirmar contraseña</label>
   <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
 
 </div>
 
 <!-- Imagen input -->
 <div class="mb-4">
-<label for="img_url" class="form-label">Foto de perfil</label>
+<label for="img_url" class="form-label">Imagen de perfil</label>
 <input class="form-control" type="file" id="img_url" name="img_url" accept="image/*">
 </div>
 

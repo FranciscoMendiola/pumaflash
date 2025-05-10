@@ -1,52 +1,66 @@
 from django import forms
-from .models import Usuario
+from APP.models import User  # Asegúrate de que el modelo se llama 'User'
 
-# Bibliotecas del video de César
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-
-class UsuarioForm(forms.ModelForm):
+class UserForm(forms.ModelForm):
     '''
-    Formulario basado en el modelo Usuario para la creación de un usuario
+    Formulario basado en el modelo User para la creación de un usuario
     '''
-    # Parámetro extra agregado al formulario un campo para contraseña 
-    # (al usar el wideget PasswordInput() en el html se pondrá "censurada" por defecto, es decir de tipo password)
-    confirma_contraseña = forms.CharField(widget=forms.PasswordInput(), label="Confirmar Contraseña")
+    # Campo adicional agregado al formulario para la confirmación de la contraseña
+    name = forms.CharField(widget=forms.PasswordInput(), label="Nombres(s)", required=True)
+    first_name = forms.CharField(widget=forms.TextInput(), label="Apellido paterno", required=True)
+    last_name = forms.CharField(widget=forms.TextInput(), label="Apellido materno", required=True)
+    email = forms.CharField(widget=forms.EmailInput(), label="Correo", required=True)
+    password = forms.CharField(widget=forms.PasswordInput(), label="Contraseña", required=True)
+    confirm_password = forms.CharField(widget=forms.PasswordInput(), label="Confirmar Contraseña", required=True)
+    img_url = forms.CharField(widget=forms.FileInput(), label="Imagen de perfil", required=False)
 
     class Meta:
-        model = Usuario
-        fields = ['nombre', 'apellido_paterno', 'apellido_materno', 'correo', 'contraseña', 'confirma_contraseña', 'img_url']
-        widgets = {
-            'contraseña': forms.PasswordInput(),
-        }
-
+        model = User
+        fields = ['name', 'first_name', 'last_name', 'email', 'password', 'confirm_password', 'img_url']
+        labels = {'name': 'Nombre(s)', 'first_name': 'Apellido Paterno', 'last_name': 'Apellido Materno',
+                  'email': 'Correo', 'password': 'Contraseña',
+                  'img_url': 'Imagen de Perfil'}
+        
     def clean(self): 
         cleaned_data = super().clean()
-        contraseña = cleaned_data.get("contraseña")
-        if contraseña:
-            # Validación de la contraseña (mínimo 8 caracteres, al menos una letra y un número)
-            if len(contraseña) < 6:
+        password = cleaned_data.get("password")
+        
+        if password:
+            if len(password) < 6:
                 raise forms.ValidationError("La contraseña debe tener al menos 6 caracteres.")
-
-        confirma_contraseña = cleaned_data.get("confirma_contraseña")
-        correo = cleaned_data.get("correo")
-
-        if contraseña and confirma_contraseña and contraseña != confirma_contraseña:
+        
+        confirm_password = cleaned_data.get("confirm_password")
+        email = cleaned_data.get("email")
+        
+        if password and confirm_password and password != confirm_password:
             raise forms.ValidationError("Las contraseñas no coinciden.")
-        if Usuario.objects.filter(correo=correo).exists():
+        
+        if User.objects.filter(email=email).exists():
             raise forms.ValidationError("El correo ya está registrado.")
+        
+        return cleaned_data
 
-class loginForm(forms.Form):
-    '''
-    Formulario para obtener los datos de inicio de sesión de un usuario
-    '''
-    correo = forms.EmailField(label="Correo", required=True)
-    contraseña = forms.CharField(label="Contraseña", widget=forms.PasswordInput(), required=True)
 
-    def clean_correo(self):
-        correo = self.cleaned_data.get('correo')
-        if not correo:  # Validación personalizada
-            raise forms.ValidationError("Por favor ingrese un correo.")
-        if "@" not in correo:
-            raise forms.ValidationError("El correo no tiene un formato válido.")
-        return correo
+
+class LoginForm(forms.Form):
+    '''
+    Formulario para obtener las credenciales de inicio de sesión de un usuario
+    '''
+    email = forms.EmailField(widget=forms.EmailInput(), label="Correo", required=True)
+    password = forms.CharField(widget=forms.PasswordInput(), label="Contraseña", required=True)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+
+        if not email:
+            raise forms.ValidationError("Ingrese un correo.")
+
+        if "@" not in email:  # Validación básica de formato de correo
+            raise forms.ValidationError("Correo no válido.")
+
+        # Verifica si el correo está registrado
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError("El correo no está registrado.")
+
+        return cleaned_data
