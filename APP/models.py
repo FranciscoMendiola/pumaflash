@@ -1,36 +1,54 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# Create your models here. pope francis
-class Usuario(models.Model):
-    id_usuario = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=50)
-    apellido_materno = models.CharField(max_length=50)
-    apellido_paterno = models.CharField(max_length=50)
-    correo = models.EmailField(max_length=80, unique=True)
-    contraseña = models.TextField()
-    img_url = models.ImageField(upload_to='img/usuarios', default='img/usuarios/default.png')
-    is_admin = models.BooleanField(default=False)
 
-class Grupo(models.Model):
-    id_grupo = models.AutoField(primary_key=True)
-    id_admin = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    codigo = models.CharField(max_length=6, unique=True)
-    nombre = models.CharField(max_length=50)
-    descripcion = models.TextField()
-    img_url = models.ImageField(upload_to='img/grupos', default='img/grupos/default.png')
+class User(AbstractUser):
+    email = models.EmailField(max_length=80, unique=True)
+    img_url = models.ImageField(
+        upload_to='img/usuarios', default='img/usuarios/default.png')
+    username = models.CharField(max_length=50, unique=False)
 
-class Perfil(models.Model):
-    id_perfil = models.AutoField(primary_key=True)
-    id_grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    descripcion = models.TextField()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'first_name',
+                       'last_name', 'password', 'is_staff']
+
+    def __str__(self):
+        return self.email
+
+
+class Group(models.Model):
+    id_group = models.AutoField(primary_key=True)
+    id_admin = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=6, unique=True)
+    group_name = models.CharField(max_length=50)
+    img_url = models.ImageField(
+        upload_to='img/grupos', default='img/grupos/default.png')
+
+    def __str__(self):
+        return self.group_name + " - " + self.code
+
+
+class Profile(models.Model):
+    id_profile = models.AutoField(primary_key=True)
+    id_group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.TextField()
 
     class Meta:
-        unique_together = ('id_grupo', 'id_usuario')
+        unique_together = ('id_group', 'id_user')
 
-class Comentario(models.Model): 
-    id_comentario = models.AutoField(primary_key=True)
-    id_remitente = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='comentarios_enviados')
-    id_destinatario = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='comentarios_recibidos')
-    contenido = models.TextField()
-    fecha = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.id_user.name + " - " + self.id_group.group_name
+
+
+class Comment(models.Model):
+    id_comment = models.AutoField(primary_key=True)
+    id_receiver = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name='comments_received')
+    id_sender = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name='comments_sent')
+    content = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.id_sender.id_user.name + " - " + self.id_receiver.id_user.name
