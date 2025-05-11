@@ -3,10 +3,10 @@ from django.db import models
 
 
 class User(AbstractUser):
+    username = models.CharField(max_length=50, unique=False)
     email = models.EmailField(max_length=80, unique=True)
     img_url = models.ImageField(
         upload_to='img/usuarios', default='img/usuarios/default.png')
-    username = models.CharField(max_length=50, unique=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name',
