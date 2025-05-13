@@ -58,7 +58,7 @@ class HomeView(LoginRequiredMixin, View):
         group = get_object_or_404(Group, code=code)
 
         # Validar permisos
-        if request.user.is_staff and group.id_admin != request.user.id:
+        if request.user.is_staff and group.id_admin != request.user:
             raise HttpResponse("El usuario no es administrador del grupo", status=403)
         elif not request.user.is_staff:
             get_object_or_404(Profile, id_group=group, id_user=request.user)

@@ -41,12 +41,7 @@ class GroupsView(View):
         try:
             grupo = Group.objects.get(code=code)
             messages.success(request, f'¡Bienvenido al grupo \"{grupo.group_name}\"!')
-            return redirect('prueba', code=grupo.code)
+            return redirect('home', code=grupo.code)
         except Group.DoesNotExist:
             messages.error(request, 'Código inválido. Verifica con tu profesor.')
             return redirect('groups')
-
-class PruebaView(View):
-    def get(self, request, code):
-        grupo = Group.objects.get(code=code)
-        return render(request, 'prueba.html', {'group_name': grupo.group_name})

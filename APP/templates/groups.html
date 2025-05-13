@@ -53,7 +53,7 @@
         {% if grupo.nombre %}
           <p><strong>Nombre:</strong> {{ grupo.nombre }}</p>
           <p><strong>Código:</strong> {{ grupo.code }}</p>
-          <a href="{% url 'prueba' grupo.code %}" class="btn btn-primary mt-2">Acceder</a>
+          <a href="{% url 'home' grupo.code %}" class="btn btn-primary mt-2">Acceder</a>
         {% else %}
           <p><strong>Código:</strong> {{ grupo.code }}</p>
           <p class="text-warning">Este código no tiene nombre asignado.</p>
@@ -74,7 +74,7 @@
 <!-- JS personalizado -->
 <script src="{% static 'js/scripts.js' %}"></script>
 {% block injected_js %}
-  <script src="{% static 'js/register_login.js' %}"></script>
+  <script src="{% static 'js/auth.js' %}"></script>
 {% endblock %}
 </body>
 </html>
