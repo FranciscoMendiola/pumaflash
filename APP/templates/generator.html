@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación de Código - Anuario</title>
+
+  <!-- Font Awesome (para los íconos) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- MDBootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
+  
+  <!-- Tus estilos -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  {% block injected_css %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+  {% endblock %}
+</head>
+<body>
+  {% block content %}
+  <div class="background_login">
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+      <div class="card p-4 shadow-4 text-center" style="width: 100%; max-width: 600px;">
+  
+        <div class="card-glass text-center">
+          <h2 class="fw-bold mb-4">Genera tu código</h2>
+          <form method="POST">
+            {% csrf_token %}
+              <label for="nombre">Nombre:</label>
+              <input type="text" name="nombre" required>
+              <button type="generar" class="btn btn-primary">Generar</button>
+          </form>
+          <hr class="my-4">
+          <h4 class="text-center">Grupos creados:</h4>
+          <div class="row mt-3">
+            {% for grupo in grupos %}
+              <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">{{ grupo.group_name }}</h5>
+                      <p class="card-text"><strong>Código de acceso:</strong> {{ grupo.code }}</p>
+                      <a href="{% url 'prueba' grupo.code %}" class="btn btn-primary mt-2">Acceder</a>
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+            <p class="text-muted">No hay grupos creados todavía.</p>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+    
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  
+</body>
+</html>
