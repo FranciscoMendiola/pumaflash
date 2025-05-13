@@ -11,8 +11,8 @@ class AuthView(View):
     '''
     def get(self, request):
         # Si el usuario ya está autenticado, redirige a la página principal
-        if request.user.is_authenticated:
-            return redirect("siguiente_vista")
+        #if request.user.is_authenticated: Esto hace que no nos podamos regresar a registrar
+            #return redirect("generator")
         
         data = {'user_form': UserForm(), 'login_form': LoginForm(), 'active_tab': 'login'}
 
@@ -44,8 +44,10 @@ class AuthView(View):
                 # Autenticamos al usuario y lo logueamos automáticamente
                 login(request, user)
                 print("Login correcto, bienvenido(a) ")
-                # Redirige a la página principal (o a donde desees)
-                return redirect("siguiente_vista")
+                if user.is_staff:
+                    return redirect("generator")
+                else:
+                    return redirect("groups")
             else:
                 messages.error(request, "Correo o contraseña incorrectos")
         else:
