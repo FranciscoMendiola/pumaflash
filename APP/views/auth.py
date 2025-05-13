@@ -11,9 +11,12 @@ class AuthView(View):
     '''
     def get(self, request):
         # Si el usuario ya está autenticado, redirige a la página principal
-        #if request.user.is_authenticated: Esto hace que no nos podamos regresar a registrar
-            #return redirect("generator")
-        
+        if request.user.is_authenticated:
+            if user.is_staff:
+                    return redirect("generator")
+                else:
+                    return redirect("groups")
+
         data = {'user_form': UserForm(), 'login_form': LoginForm(), 'active_tab': 'login'}
 
         return render(request, 'index.html', data)

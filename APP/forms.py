@@ -19,8 +19,6 @@ class UserForm(forms.ModelForm):
         widget=forms.PasswordInput(), label="Contraseña", required=True)
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(), label="Confirmar Contraseña", required=True)
-    img_url = forms.CharField(widget=forms.FileInput(),
-                              label="Imagen de perfil", required=False)
 
     class Meta:
         model = User
@@ -75,3 +73,17 @@ class LoginForm(forms.Form):
             raise forms.ValidationError("El correo no está registrado.")
 
         return cleaned_data
+
+
+class StudentSearchForm(forms.Form):
+    
+    username = forms.CharField(widget=forms.TextInput(), label="Nombres(s):", max_length=100, required=False)
+    first_name = forms.CharField(widget=forms.TextInput(), label="Apellido paterno", max_length=100, required=False)
+    last_name = forms.CharField(widget=forms.TextInput(), label="Apellido paterno", max_length=100, required=False)
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        return cleaned_data
+        
+        
