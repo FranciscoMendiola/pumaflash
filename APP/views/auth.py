@@ -12,8 +12,11 @@ class AuthView(View):
     def get(self, request):
         # Si el usuario ya está autenticado, redirige a la página principal
         if request.user.is_authenticated:
-            return redirect("home", "qwerty")
-        
+            if user.is_staff:
+                    return redirect("generator")
+                else:
+                    return redirect("groups")
+
         data = {'user_form': UserForm(), 'login_form': LoginForm(), 'active_tab': 'login'}
 
         return render(request, 'index.html', data)
@@ -44,8 +47,10 @@ class AuthView(View):
                 # Autenticamos al usuario y lo logueamos automáticamente
                 login(request, user)
                 print("Login correcto, bienvenido(a) ")
-                # Redirige a la página principal (o a donde desees)
-                return redirect("home", "qwerty")
+                if user.is_staff:
+                    return redirect("generator")
+                else:
+                    return redirect("groups")
             else:
                 messages.error(request, "Correo o contraseña incorrectos")
         else:
