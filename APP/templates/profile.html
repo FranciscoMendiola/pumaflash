@@ -47,25 +47,33 @@
                     <h6>Comentarios</h6>
                     <div class="comments-list">
                         {% for comment in comments%}
-                            {% include "common/comment.html" %}
+                        {% include "common/comment.html" %}
                         {% empty %}
-                        <div class="card text-center w-100 py-3">
+                        <div class="text-center w-100 py-3">
                             <div class="card-body py-5">
-                              <h5 class="card-title">Sin comentarios</h5>
+                                <h5 class="card-title">Sin comentarios</h5>
                             </div>
-                          </div>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>
                 {% if not request.user.is_staff%}
-                <div class="send-comment-box d-flex gap-3">
+                <!-- El div de la caja para enviar comentario se convierte en el form, ahora son el mismo elemento -->
+                <form method="POST" action="" id="commentForm" class="send-comment-box d-flex gap-3">
+                    {% csrf_token %}
                     <img src="{{ user.img_url.url }}" alt="User Pic" class="rounded-circle">
-                    <div contenteditable="true" class="form-control content-editable" placeholder="Escribe un comentario..."></div>
+                    <div contenteditable="true" class="form-control content-editable" id="editableDiv" placeholder="Escribe un comentario..."></div>
+                    <input type="hidden" name="content" id="hiddenContentInput">
                     <button class="btn btn-dark">Enviar</button>
-                </div>
+                </form>
+                
                 {% endif %}
             </div>
         </div>
 </div>
+{% endblock %}
 
+
+{% block injected_js %}
+<script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

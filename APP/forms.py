@@ -1,5 +1,6 @@
 from django import forms
-from APP.models import User  # Asegúrate de que el modelo se llama 'User'
+# Asegúrate de que el modelo se llama 'User'
+from APP.models import User, Comment
 
 
 class UserForm(forms.ModelForm):
@@ -76,14 +77,36 @@ class LoginForm(forms.Form):
 
 
 class StudentSearchForm(forms.Form):
-    
-    username = forms.CharField(widget=forms.TextInput(), label="Nombres(s):", max_length=100, required=False)
-    first_name = forms.CharField(widget=forms.TextInput(), label="Apellido paterno", max_length=100, required=False)
-    last_name = forms.CharField(widget=forms.TextInput(), label="Apellido paterno", max_length=100, required=False)
-    
+
+    username = forms.CharField(widget=forms.TextInput(
+    ), label="Nombres(s):", max_length=100, required=False)
+    first_name = forms.CharField(widget=forms.TextInput(
+    ), label="Apellido paterno", max_length=100, required=False)
+    last_name = forms.CharField(widget=forms.TextInput(
+    ), label="Apellido paterno", max_length=100, required=False)
+
     def clean(self):
         cleaned_data = super().clean()
-        
+
         return cleaned_data
-        
-        
+
+
+class CommentForm(forms.ModelForm):
+    '''
+    Formulario basado en el modelo Comment para la creación de un comentario
+    '''
+
+    class Meta:
+        model = Comment
+        fields = ['content']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        content = cleaned_data.get("content")
+
+        if content:
+            if len(content) < 1:
+                raise forms.ValidationError(
+                    "El comentario no puede estar vacío.")
+
+        return cleaned_data
