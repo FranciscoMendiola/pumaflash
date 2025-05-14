@@ -3,68 +3,70 @@
 
 {% block content %}
 <header>
-        {% include 'common/navbar.html' %}
+  {% include 'common/navbar.html' %}
 </header>
 
 <main class="container mt-5">
-
   {% block main_content %}
-  <form method="POST" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 align-items-center">
+  
+  <form method="POST" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 align-items-end" enctype="multipart/form-data">
     {% csrf_token %}
-    <!-- Nombre(s) input -->
-    <div data-mdb-input-init class="col">
-      <label for="username" class="form-label">Nombre(s)</label>
-      <input type="text" name="username" id="username" class="form-control"
-        value="{{ form.data.username|default_if_none:'' }}" />
-    </div>
-  
-    <!-- Apellido Paterno input -->
-    <div data-mdb-input-init class="col">
-      <label for="first_name" class="form-label">Apellido paterno</label>
-      <input type="text" name="first_name" id="first_name" class="form-control"
-        value="{{ form.data.first_name|default_if_none:'' }}" />
-    </div>
-  
-    <!-- Apellido Materno input -->
-    <div data-mdb-input-init class="col">
-      <label for="last_name" class="form-label">Apellido materno</label>
-      <input type="text" name="last_name" id="last_name" class="form-control"
-        value="{{ form.data.last_name|default_if_none:'' }}" />
-    </div>
-  
-    <!-- Botón de búsqueda -->
-    <!-- Botón de búsqueda más alto -->
-<div class="col d-flex align-items-end mt-5">
-  <button type="submit" class="btn btn-dark w-100">
-    <strong>Buscar</strong>
-  </button>
-</div>
 
-  </form>
-  
-
-
-<!-- Tarjetas -->
-<div class="py-5">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
-      {% for profile in profiles %}
-      <div class="col">
-              {% include 'common/profile_preview.html' %}
+    <!-- Nombre(s) -->
+    <div class="col">
+      <div class="form-outline" data-mdb-input-init>
+        <input type="text" name="username" id="username" class="form-control"
+          value="{{ form.data.username|default_if_none:'' }}" />
+        <label class="form-label" for="username">Nombre(s)</label>
       </div>
-      {% empty %}
-          <div class="card text-center w-100 py-3">
-              <div class="card-header py-3">
-                  Sin resultados
-              </div>
-              <div class="card-body py-5">
-                  <h5 class="card-title">No se han encontrado estudiantes</h5>
-              </div>
-          </div>
-      {% endfor %}
-  </div>
-</div>
-  {% endblock %}
+    </div>
 
+    <!-- Apellido paterno -->
+    <div class="col">
+      <div class="form-outline" data-mdb-input-init>
+        <input type="text" name="first_name" id="first_name" class="form-control"
+          value="{{ form.data.first_name|default_if_none:'' }}" />
+        <label class="form-label" for="first_name">Apellido paterno</label>
+      </div>
+    </div>
+
+    <!-- Apellido materno -->
+    <div class="col">
+      <div class="form-outline" data-mdb-input-init>
+        <input type="text" name="last_name" id="last_name" class="form-control"
+          value="{{ form.data.last_name|default_if_none:'' }}" />
+        <label class="form-label" for="last_name">Apellido materno</label>
+      </div>
+    </div>
+
+    <!-- Botón -->
+    <div class="col">
+      <button type="submit" class="btn btn-dark w-100">
+        <strong>Buscar</strong>
+      </button>
+    </div>
+  </form>
+
+  <!-- Tarjetas -->
+  <div class="py-5">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+      {% for profile in profiles %}
+        <div class="col">
+          {% include 'common/profile_preview.html' %}
+        </div>
+      {% empty %}
+        <div class="card text-center w-100 py-3">
+          <div class="card-header py-3">
+            Sin resultados
+          </div>
+          <div class="card-body py-5">
+            <h5 class="card-title">No se han encontrado estudiantes</h5>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% endblock %}
 </main>
 {% endblock %}
-
