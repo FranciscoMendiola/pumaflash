@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
-from APP.models import Profile
+from APP.models import Comment, Profile
 
 
 class ProfileView(LoginRequiredMixin, View):
@@ -11,8 +11,9 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request, id):
         requested_profile, active_profile = self.__validate_request(request, id)
         active_group = requested_profile.id_group
+        comments = Comment.objects.filter(id_receiver=requested_profile)
         
-        data = {'requested_profile': requested_profile, 'active_profile':active_profile,'active_group':active_group}
+        data = {'requested_profile': requested_profile, 'active_profile':active_profile,'active_group':active_group, 'comments':comments}
         
         return render(request, 'profile.html', data)
         
