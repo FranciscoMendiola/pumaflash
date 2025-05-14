@@ -2,3 +2,5 @@
 from .auth import AuthView
 # from .otro_modulo import OtraVista
 from .home import HomeView
+
+from .profile import ProfileView

@@ -1,3 +1,33 @@
 .cursor-pointer {
     cursor: pointer;
 }
+
+.custom-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-card:hover {
+    transform: scale(1.05);  /* Aumenta el tamaño de la tarjeta */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.384);  /* Agrega una sombra para resaltar el efecto */
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+
+}
+
+.card-header {
+    padding-top: 30px;
+}
+
+.circle-image {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 50%;
+}

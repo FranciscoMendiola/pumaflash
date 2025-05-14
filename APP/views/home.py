@@ -11,56 +11,60 @@ class HomeView(LoginRequiredMixin, View):
     Vista para mostrar la página principal del grupo al que pertenece el usuario.
     '''
     def get(self, request, code):
-        group = self.__verification_request(request, code)
-
-        profiles = Profile.objects.filter(id_group=group)
-        students = User.objects.filter(id__in=profiles.values('id_user'))
+        active_group,active_profile = self.__validate_request(request, code)
+        
+        # Obtener todos los perfiles del grupo activo
+        profiles = Profile.objects.filter(id_group=active_group)
 
         data = {
-            'user': request.user,
-            'group': group,
+            'active_group': active_group, # Requerido para navbar
+            'active_profile': active_profile, # Requerido por el navbar
             'form': StudentSearchForm(),
-            'students': students
+            'profiles': profiles,
         }
         return render(request, 'home.html', data)
     
+    
     def post(self, request, code):
-        group = self.__verification_request(request, code)
-
-        profiles = Profile.objects.filter(id_group=group)
-        students = User.objects.filter(id__in=profiles.values('id_user'))  # Por defecto, todos
+        active_group, active_profile = self.__validate_request(request, code)
 
         form = StudentSearchForm(request.POST)
-        
+
+        # Obtener todos los perfiles del grupo activo
+        profiles = Profile.objects.filter(id_group=active_group)
+
         if form.is_valid():
             username = form.cleaned_data['username']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
 
+            # Filtrar perfiles
             if username:
-                students = students.filter(username__icontains=username)
+                profiles = profiles.filter(id_user__username__icontains=username)
             if first_name:
-                students = students.filter(first_name__icontains=first_name)
+                profiles = profiles.filter(id_user__first_name__icontains=first_name)
             if last_name:
-                students = students.filter(last_name__icontains=last_name)
+                profiles = profiles.filter(id_user__last_name__icontains=last_name)
         else:
             form = StudentSearchForm()
-                
+            
         data = {
-            'user': request.user,
-            'group': group,
+            'active_group': active_group, # Requerido para navbar
+            'active_profile': active_profile, # Requerido por el navbar
             'form': form,
-            'students': students
+            'profiles': profiles,
         }
         return render(request, 'home.html', data)
+    
 
-    def __verification_request(self, request, code):
-        group = get_object_or_404(Group, code=code)
+    def __validate_request(self, request, code):
+        active_group = get_object_or_404(Group, code=code)
+        active_profile = None
 
         # Validar permisos
-        if request.user.is_staff and group.id_admin != request.user:
+        if request.user.is_staff and active_group.id_admin != request.user:
             raise HttpResponse("El usuario no es administrador del grupo", status=403)
         elif not request.user.is_staff:
-            get_object_or_404(Profile, id_group=group, id_user=request.user)
+            active_profile = get_object_or_404(Profile, id_group=active_group, id_user=request.user)
 
-        return group
+        return active_group,active_profile

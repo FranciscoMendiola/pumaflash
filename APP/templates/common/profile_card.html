@@ -1,0 +1,113 @@
+{% load static %}
+
+<!-- Card Wrapper -->
+<div class="card">
+    <!-- Profile Info as Card Header -->
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col-3 col-md-2 text-center">
+                <img src="{{ requested_profile.id_user.img_url.url }}" alt="Profile Picture" class="profile-pic">
+            </div>
+            <div class="col-9 col-md-10">
+                <h4 class="username">{{ requested_profile.id_user.username }}</h4>
+                <p class="full-name">{{ requested_profile.id_user.first_name }} {{ requested_profile.last_name }}</p>
+                <p class="description">"{{ requested_profile.description }}"</p>
+            </div>
+        </div>
+        <!-- Medals Section -->
+            <div class="medals-section">
+                <div class="medal">
+                    <div class="medal-circle">🏆
+                        <span class="medal-tooltip">Más inteligente</span>
+                    </div>
+                </div>
+                <div class="medal">
+                    <div class="medal-circle">🌟
+                        <span class="medal-tooltip">Más carismático</span>
+                    </div>
+                </div>
+                <div class="medal">
+                    <div class="medal-circle">🏆
+                        <span class="medal-tooltip">Más inteligente</span>
+                    </div>
+                </div>
+                <div class="medal">
+                    <div class="medal-circle">🏆
+                        <span class="medal-tooltip">Más inteligente</span>
+                    </div>
+                </div>
+                <div class="medal">
+                    <div class="medal-circle">🌟
+                        <span class="medal-tooltip">Más carismático</span>
+                    </div>
+                </div>
+                <div class="medal">
+                    <div class="medal-circle">🏆
+                        <span class="medal-tooltip">Más inteligente</span>
+                    </div>
+                </div>
+                <div class="medal">
+                    <div class="medal-circle">🌟
+                        <span class="medal-tooltip">Más carismático</span>
+                    </div>
+                </div>
+                <div class="medal">
+                    <div class="medal-circle">🏆
+                        <span class="medal-tooltip">Más inteligente</span>
+                    </div>
+                </div>
+                <div class="medal">
+                    <div class="medal-circle">🌟
+                        <span class="medal-tooltip">Más carismático</span>
+                    </div>
+                </div>
+                <div class="medal">
+                    <div class="medal-circle">😊
+                        <span class="medal-tooltip">Más guapo</span>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+            <!-- Comments Section -->
+            <div class="comments-section">
+                <div class="comments-box">
+                    <h6>Comentarios</h6>
+                    <div class="comments-list">
+                        <div class="comment">
+                            <img src="{% static 'img/perfil_icon.png' %}" alt="User Pic">
+                            <div class="comment-text">
+                                <strong>classmate1</strong> Primer comentario generico del perfil.
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <img src="{% static 'img/perfil_icon.png' %}" alt="User Pic">
+                            <div class="comment-text">
+                                <strong>classmate2</strong> Segundo comentario generico del perfil! 💖
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <img src="{% static 'img/perfil_icon.png' %}" alt="User Pic">
+                            <div class="comment-text">
+                                <strong>classmate1</strong> Primer comentario generico del perfil.
+                            </div>
+                        </div>
+                        <div class="comment">
+                            <img src="{% static 'img/perfil_icon.png' %}" alt="User Pic">
+                            <div class="comment-text">
+                                <strong>classmate2</strong> Segundo comentario generico del perfil! 💖
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if not request.user.is_staff%}
+                <div class="send-comment-box d-flex gap-3">
+                    <img src="{{ user.img_url.url }}" alt="User Pic" class="rounded-circle">
+                    <div contenteditable="true" class="form-control content-editable" placeholder="Escribe un comentario..."></div>
+                    <button class="btn btn-dark">Enviar</button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+</div>
