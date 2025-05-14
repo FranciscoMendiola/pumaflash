@@ -4,7 +4,7 @@ import random, string
 from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from APP.models import Group
+from APP.models import Group, Profile
 
 def generar_codigo_unico():
     while True:
@@ -34,12 +34,27 @@ class GeneratorView(View):
 
 class GroupsView(View):
     def get(self, request):
+        # Si el usuario ya tiene un grupo, redirigir automáticamente
+        if Profile.objects.filter(id_user=request.user).exists():
+            grupo = Profile.objects.filter(id_user=request.user).first().id_group
+            return redirect('home', code=grupo.code)
+        
         return render(request, 'groups.html')
 
     def post(self, request):
         code = request.POST.get('code', '').strip().upper()
         try:
             grupo = Group.objects.get(code=code)
+
+            # Validar si ya tiene un grupo (no permitir cambiar de grupo)
+            if Profile.objects.filter(id_user=request.user).exists():
+                messages.warning(request, 'Ya perteneces a un grupo. No puedes cambiar de grupo.')
+                perfil = Profile.objects.filter(id_user=request.user).first()
+                return redirect('home', code=perfil.id_group.code)
+
+            # Crear perfil si aún no tiene
+            Profile.objects.create(id_user=request.user, id_group=grupo, description='')
+
             messages.success(request, f'¡Bienvenido al grupo \"{grupo.group_name}\"!')
             return redirect('home', code=grupo.code)
         except Group.DoesNotExist:
