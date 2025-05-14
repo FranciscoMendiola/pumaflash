@@ -7,7 +7,7 @@
   <!-- Container wrapper -->
   <div class="container py-2">
     <!-- Navbar brand -->
-    <a class="navbar-brand me-2" href="/home/{{ group.code }}">
+    <a class="navbar-brand me-2" href="/home/{{ active_group.code }}">
       <img
         src="{% static 'img/favicon.ico' %}"
         height="45"
@@ -26,8 +26,8 @@
       data-mdb-target="#navbarButtonsExample"
       aria-controls="navbarButtonsExample"
       aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+      aria-label="Toggle navigation">
+
       <i class="fas fa-bars"></i>
     </button>
 
@@ -36,7 +36,7 @@
       <!-- Left links -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/home/{{ group.code }}">Inicio</a>
+          <a class="nav-link" href="/home/{{ active_group.code }}">Inicio</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Premios</a>
@@ -50,7 +50,7 @@
       <!-- Right elements -->
       <div class="d-flex align-items-center">
         <a class="btn btn-primary btn-rounded me-3">
-          Grupo: <strong> {{ group.group_name }} </strong>
+          Grupo: <strong> {{ active_group.group_name }} </strong>
         </a>
         <!-- Avatar -->
         <div class="dropdown">
@@ -61,7 +61,7 @@
             role="button"
             aria-expanded="false">
             <img
-              src="{{ user.img_url.url }}"
+              src="{{ request.user.img_url.url }}"
               class="rounded-circle"
               height="40"
               alt="Black and White Portrait of a Man"
@@ -71,11 +71,12 @@
           </a>
           <ul
             class="dropdown-menu dropdown-menu-end"
-            aria-labelledby="navbarDropdownMenuAvatar"
-          >
+            aria-labelledby="navbarDropdownMenuAvatar">
+            {% if not request.user.is_staff %}
             <li>
-              <a class="dropdown-item" href="#">Mi perfil</a>
+              <a class="dropdown-item" href="/profile/{{ active_profile.id_profile}}">Mi perfil</a>
             </li>
+            {% endif %}
             <li>
               <a class="dropdown-item" href="/logout">Cerrar sesión</a>
             </li>
