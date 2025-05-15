@@ -31,8 +31,7 @@ class ProfileView(LoginRequiredMixin, View):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.id_receiver = requested_profile
-            comment.id_sender = get_object_or_404(
-                Profile, id_user=request.user)
+            comment.id_sender = active_profile
             comment.save()
             # Recargar para mostrar el nuevo comentario
             return redirect('profile', id=id)
