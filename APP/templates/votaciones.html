@@ -41,5 +41,16 @@
   </div>
 
   {% endblock %}
+  {% regroup ranking by category__name as votos_por_categoria %}
+
+  {% for categoria in votos_por_categoria %}
+    <h2>{{ categoria.grouper }}</h2>
+    <ul>
+      {% for voto in categoria.list %}
+        <li>{{ voto.voted_user__first_name }} {{ voto.voted_user__last_name }}: {{ voto.total }} votos</li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+  
 </main>
 {% endblock %}
