@@ -4,6 +4,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from APP.models import Group, Profile, User, Category, Vote
 
+def get_prev_category_id(current_id):
+    categorias = list(Category.objects.all().order_by('id_category'))
+    for i, cat in enumerate(categorias):
+        if cat.id_category == int(current_id) and i - 1 >= 0:
+            return categorias[i - 1].id_category
+    return categorias[-1].id_category  # volver al final si ya estás en la primera
+
+
 def get_next_category_id(current_id):
     categorias = list(Category.objects.all().order_by('id_category'))
     for i, cat in enumerate(categorias):
@@ -12,7 +20,7 @@ def get_next_category_id(current_id):
     return categorias[0].id_category  # volver al principio si ya estás en la última
 
 class VotacionesView(LoginRequiredMixin, View):
-    def get(self, request):
+    def get(self, request,code):
         user = request.user
         # Obtener el grupo del usuario (asumiendo que siempre tiene uno)
         group = get_object_or_404(Group, profile__id_user=user)
@@ -31,13 +39,6 @@ class VotacionesView(LoginRequiredMixin, View):
             voting_user=user,
             category=current_category
         ).exists()
-        
-        context = {
-            "students": students,
-            "current_category": current_category,
-            "next_category": get_next_category_id(current_category.id_category),
-            "has_voted": vote_exists,
-        }
 
         votos_totales = Vote.objects.values(
             'category__name',                     # nombre de la categoría
@@ -45,13 +46,23 @@ class VotacionesView(LoginRequiredMixin, View):
             'voted_user__last_name',
             'voted_user__id'
         ).annotate(total=Count('id_vote')).order_by('category__name', '-total')
-
+        
+        context = {
+            "code": code,
+            "group": group,
+            "students": students,
+            "current_category": current_category,
+            "next_category": get_next_category_id(current_category.id_category),
+            "prev_category": get_prev_category_id(current_category.id_category),
+            "has_voted": vote_exists,
+            "ranking": votos_totales,
+        }
 
         context['ranking'] = votos_totales #Tomar en cuenta para los premios
 
         return render(request, "votaciones.html", context)
 
-    def post(self, request):
+    def post(self, request,code):
         user = request.user
         group = get_object_or_404(Group, profile__id_user=user)
 
@@ -77,6 +88,8 @@ class VotacionesView(LoginRequiredMixin, View):
                 category=current_category
             )
 
-        # Redirigir a la siguiente categoría
-        next_category_id = get_next_category_id(current_category.id_category)
-        return redirect(f"{request.path}?categoria={next_category_id}")
+        # Mantenerse en la misma categoría
+        return redirect(f"/home/{code}/votaciones/?categoria={current_category.id_category}")
+
+
+
