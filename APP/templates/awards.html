@@ -1,0 +1,75 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block injected_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block main_content %}
+
+<h2 class="text-center fw-bold mb-4">Premios otorgados</h2>
+
+<form method="POST" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 align-items-end"
+    enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Nombre(s) -->
+    <div class="col">
+        <div class="form-outline" data-mdb-input-init>
+            <input type="text" name="username" id="username" class="form-control"
+                value="{{ form.data.username|default_if_none:'' }}" />
+            <label class="form-label" for="username">Nombre(s)</label>
+        </div>
+    </div>
+
+    <!-- Apellido paterno -->
+    <div class="col">
+        <div class="form-outline" data-mdb-input-init>
+            <input type="text" name="first_name" id="first_name" class="form-control"
+                value="{{ form.data.first_name|default_if_none:'' }}" />
+            <label class="form-label" for="first_name">Apellido paterno</label>
+        </div>
+    </div>
+
+    <!-- Apellido materno -->
+    <div class="col">
+        <div class="form-outline" data-mdb-input-init>
+            <input type="text" name="last_name" id="last_name" class="form-control"
+                value="{{ form.data.last_name|default_if_none:'' }}" />
+            <label class="form-label" for="last_name">Apellido materno</label>
+        </div>
+    </div>
+
+    <!-- Botón -->
+    <div class="col">
+        <button type="submit" class="btn btn-dark w-100">
+            <strong>Buscar</strong>
+        </button>
+    </div>
+</form>
+
+<!-- Tarjetas -->
+<div class="py-5">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+        {% for award in awards %}
+        <div class="col">
+            {% include 'common/award_preview.html' %}
+        </div>
+        {% empty %}
+        <div class="card text-center w-100 py-3">
+            <div class="card-header py-3">
+                Sin resultados
+            </div>
+            <div class="card-body py-5">
+                <h5 class="card-title">No se han encontrado premios</h5>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block injected_js %}
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}
