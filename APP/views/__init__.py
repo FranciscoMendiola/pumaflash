@@ -4,3 +4,5 @@ from .auth import AuthView
 from .home import HomeView
 
 from .profile import ProfileView
+
+from .awards import AwardsView
