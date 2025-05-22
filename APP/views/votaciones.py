@@ -20,33 +20,38 @@ def get_next_category_id(current_id):
     return categorias[0].id_category  # volver al principio si ya estás en la última
 
 class VotacionesView(LoginRequiredMixin, View):
-    def get(self, request,code):
+    def get(self, request, code):
         user = request.user
-        # Obtener el grupo del usuario (asumiendo que siempre tiene uno)
-        group = get_object_or_404(Group, profile__id_user=user)
-        
+
+        # Obtener el grupo a partir del código de URL
+        group = get_object_or_404(Group, code=code)
+
+        # Obtener la categoría actual (o la primera)
         current_category_id = request.GET.get('categoria')
         if current_category_id:
             current_category = get_object_or_404(Category, pk=current_category_id)
         else:
             current_category = Category.objects.first()
-        
-        # Obtener los estudiantes del grupo, excepto el usuario actual
-        students = User.objects.filter(profile__id_group=group).exclude(id=user.id)
-        
-        # Verificar si el usuario ya votó en esta categoría
-        vote_exists = Vote.objects.filter(
-            voting_user=user,
-            category=current_category
-        ).exists()
+
+        # Obtener todos los estudiantes del grupo, excepto el staff
+        students = User.objects.filter(profile__id_group=group, is_staff=False)
+
+        # Si es staff, no puede votar
+        if user.is_staff:
+            vote_exists = True  # Así se oculta el botón de votar
+        else:
+            vote_exists = Vote.objects.filter(
+                voting_user=user,
+                category=current_category
+            ).exists()
 
         votos_totales = Vote.objects.values(
-            'category__name',                     # nombre de la categoría
+            'category__name',
             'voted_user__first_name',
             'voted_user__last_name',
             'voted_user__id'
         ).annotate(total=Count('id_vote')).order_by('category__name', '-total')
-        
+
         context = {
             "code": code,
             "group": group,
@@ -58,9 +63,8 @@ class VotacionesView(LoginRequiredMixin, View):
             "ranking": votos_totales,
         }
 
-        context['ranking'] = votos_totales #Tomar en cuenta para los premios
-
         return render(request, "votaciones.html", context)
+
 
     def post(self, request,code):
         user = request.user
