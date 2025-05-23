@@ -21,29 +21,23 @@ def get_next_category_id(current_id):
 
 class VotacionesView(LoginRequiredMixin, View):
     def get(self, request, code):
-        user = request.user
+        active_group, active_profile = self.__validate_request(request, code)
 
-        # Obtener el grupo a partir del código de URL
-        group = get_object_or_404(Group, code=code)
+        if not Category.objects.exists():
+            return render(request, "noCategorias.html")
 
-        # Obtener la categoría actual (o la primera)
         current_category_id = request.GET.get('categoria')
         if current_category_id:
             current_category = get_object_or_404(Category, pk=current_category_id)
         else:
             current_category = Category.objects.first()
 
-        # Obtener todos los estudiantes del grupo, excepto el staff
-        students = User.objects.filter(profile__id_group=group, is_staff=False)
+        students = User.objects.filter(profile__id_group=active_group, is_staff=False)
 
-        # Si es staff, no puede votar
-        if user.is_staff:
-            vote_exists = True  # Así se oculta el botón de votar
-        else:
-            vote_exists = Vote.objects.filter(
-                voting_user=user,
-                category=current_category
-            ).exists()
+        vote_exists = request.user.is_staff or Vote.objects.filter(
+            voting_user=request.user,
+            category=current_category
+        ).exists()
 
         votos_totales = Vote.objects.values(
             'category__name',
@@ -54,7 +48,9 @@ class VotacionesView(LoginRequiredMixin, View):
 
         context = {
             "code": code,
-            "group": group,
+            "group": active_group,
+            "active_group": active_group,
+            "active_profile": active_profile,
             "students": students,
             "current_category": current_category,
             "next_category": get_next_category_id(current_category.id_category),
@@ -65,10 +61,11 @@ class VotacionesView(LoginRequiredMixin, View):
 
         return render(request, "votaciones.html", context)
 
+    def post(self, request, code):
+        active_group, active_profile = self.__validate_request(request, code)
 
-    def post(self, request,code):
-        user = request.user
-        group = get_object_or_404(Group, profile__id_user=user)
+        if not Category.objects.exists():
+            return render(request, "noCategorias.html")
 
         current_category_id = request.POST.get('categoria')
         if current_category_id:
@@ -76,9 +73,8 @@ class VotacionesView(LoginRequiredMixin, View):
         else:
             current_category = Category.objects.first()
 
-        # Verificar si ya votó en esta categoría (previene doble voto)
         vote_exists = Vote.objects.filter(
-            voting_user=user,
+            voting_user=request.user,
             category=current_category
         ).exists()
 
@@ -88,12 +84,19 @@ class VotacionesView(LoginRequiredMixin, View):
 
             Vote.objects.create(
                 voted_user=voted_user,
-                voting_user=user,
+                voting_user=request.user,
                 category=current_category
             )
 
-        # Mantenerse en la misma categoría
         return redirect(f"/home/{code}/votaciones/?categoria={current_category.id_category}")
 
+    def __validate_request(self, request, code):
+        active_group = get_object_or_404(Group, code=code)
+        active_profile = None
 
+        if request.user.is_staff and active_group.id_admin != request.user:
+            return HttpResponse("El usuario no es administrador del grupo", status=403)
+        elif not request.user.is_staff:
+            active_profile = get_object_or_404(Profile, id_group=active_group, id_user=request.user)
 
+        return active_group, active_profile
