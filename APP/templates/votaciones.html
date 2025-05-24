@@ -1,0 +1,46 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block injected_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+
+{% block main_content %}
+
+<!-- Encabezado de categoría -->
+<div class="d-flex justify-content-center align-items-center mb-4 gap-3">
+  <form method="get" action="{% url 'votaciones' code=group.code %}">
+    <input type="hidden" name="categoria" value="{{ prev_category }}">
+    <button type="submit" class="btn btn-outline-dark">&lt;</button>
+  </form>
+
+  <h3 class="mb-0 mx-3"> {{ current_category.name }}</h3>
+
+  <form method="get" action="{% url 'votaciones' code=group.code %}">
+    <input type="hidden" name="categoria" value="{{ next_category }}">
+    <button type="submit" class="btn btn-outline-dark">&gt;</button>
+  </form>
+</div>
+
+
+<!-- Tarjetas -->
+<div class="py-5">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+    {% for student in students %}
+    <div class="col">
+      {% include 'common/vote.html' %}
+    </div>
+    {% empty %}
+    <div class="card text-center w-100 py-3">
+      <div class="card-header py-3">
+        Sin resultados
+      </div>
+      <div class="card-body py-5">
+        <h5 class="card-title">No se han encontrado estudiantes</h5>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
