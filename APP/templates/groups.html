@@ -4,11 +4,12 @@
 {% block content %}
 <div class="background_login">
   <div class="container min-vh-100 d-flex justify-content-center align-items-center">
-    <div class="card p-4 shadow-4 text-center" style="width: 100%; max-width: 600px;">
+    <div class="card p-4 shadow-4" style="width: 100%; max-width: 500px;">
 
-      <!-- Título -->
-      <h2 class="fw-bold mb-4">Verifica tu código</h2>
-      <p class="text-muted mb-4">Si no tienes código, solicítalo a tu profesor</p>
+      <!-- Encabezado -->
+      <div class="text-center mb-3">
+        <p>Ingresa el código para acceder a <strong>PumaFlash</strong></p>
+      </div>
 
       <!-- Formulario -->
       <form method="POST">
@@ -31,7 +32,6 @@
         {% endif %}
       </form>
 
-      <!-- Resultados del grupo -->
       {% if grupo %}
       <hr>
       {% if grupo.nombre %}
@@ -43,7 +43,6 @@
       <p class="text-warning">Este código no tiene nombre asignado.</p>
       {% endif %}
       {% endif %}
-
     </div>
   </div>
 </div>
