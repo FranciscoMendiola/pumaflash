@@ -77,6 +77,7 @@ class ProfileView(LoginRequiredMixin, View):
             request.user.save()
             update_session_auth_hash(request, request.user)  # Actualizar la sesión del usuario
             messages.success(request, "Perfil actualizado correctamente")
+            return redirect('profile', id=active_profile.id_profile)
         else:
             self.__get_first_error(request, form)
         
