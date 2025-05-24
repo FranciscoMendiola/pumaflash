@@ -1,3 +1,8 @@
+.required::after {
+    content: " *";
+    color: red;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
@@ -26,14 +31,6 @@
 }
 
 .circle-image {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 50%;
-}
-
-
-.circle-image {
     position: relative;
     width: 100%;
     padding-bottom: 100%;
@@ -51,7 +48,7 @@
 }
 
 
-@media (max-width: 990px) {
+@media (max-width: 990px) { 
     .custom-card:hover {
         transform: scale(1.02);
     }
