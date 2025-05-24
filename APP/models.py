@@ -32,7 +32,7 @@ class Profile(models.Model):
     id_profile = models.AutoField(primary_key=True)
     id_group = models.ForeignKey(Group, on_delete=models.CASCADE)
     id_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    description = models.TextField()
+    description = models.TextField(default="Bienvenido(a) a mi perfil, soy miembro de PumaFlash")
 
     class Meta:
         unique_together = ('id_group', 'id_user')
