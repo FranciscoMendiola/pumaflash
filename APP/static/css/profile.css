@@ -1,4 +1,21 @@
 
+/* Sección de para editar de perfil */
+.edit-profile {
+    font-size: 2rem; /* Tamaño más grande para el ícono */
+    cursor: pointer; /* Cursor de mano al pasar por encima */
+    transition: color 0.3s; /* Suaviza el cambio de color */
+    top: 20px;
+    right: 30px;
+}
+
+.edit-profile i {
+    color:rgb(0, 0, 0); /* Color más oscuro al pasar el cursor */
+}
+
+.edit-profile i:hover {
+    color:rgb(87, 89, 107); /* Color más oscuro al pasar el cursor */
+}
+
 /* Sección de información de perfil */
 
 .profile-pic {
@@ -234,13 +251,6 @@
         height: 50px;
         font-size: 1.5rem;
     }
-    .card-header{
-        padding: 20px 5px;
-    }
-
-    .card-body {
-        padding: 5px;
-    }
 
     .comment img,
     .send-comment-box img {
@@ -267,5 +277,15 @@
         font-size: 0.8rem;
         margin-left: 1.2rem;
     }   
+    .card-header{
+        padding: 20px 5px;
+    }
+    .card-body {
+        padding: 5px;
+    }
+    .edit-profile {
+    top: 12px;
+    right: 20px;
+}
     }
 }

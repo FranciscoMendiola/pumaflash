@@ -6,9 +6,3 @@
     background-position: center;
     /* Centra la imagen */
 }
-
-
-.required::after {
-    content: " *";
-    color: red;
-}

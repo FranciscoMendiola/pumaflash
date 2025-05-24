@@ -63,7 +63,8 @@
             <img
               src="{{ request.user.img_url.url }}"
               class="rounded-circle"
-              height="40"
+              height="48"
+              width="48"
               alt="Black and White Portrait of a Man"
               loading="lazy"
             />
@@ -72,7 +73,12 @@
           <ul
             class="dropdown-menu dropdown-menu-end"
             aria-labelledby="navbarDropdownMenuAvatar">
-            {% if not request.user.is_staff %}
+
+            {% if request.user.is_staff %}
+            <li>
+              <a class="dropdown-item" href="/generator">Salir del grupo</a>
+            </li>            
+            {% else %}
             <li>
               <a class="dropdown-item" href="/profile/{{ active_profile.id_profile}}">Mi perfil</a>
             </li>
