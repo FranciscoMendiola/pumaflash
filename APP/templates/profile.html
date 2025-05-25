@@ -20,23 +20,14 @@
             </div>
         </div>
         <!-- Medals Section -->
-        <div class="medals-section">
-            <div class="medal">
-                <div class="medal-circle">🏆
-                    <span class="medal-tooltip">Más inteligente</span>
-                </div>
-            </div>
-            <div class="medal">
-                <div class="medal-circle">🌟
-                    <span class="medal-tooltip">Más carismático</span>
-                </div>
-            </div>
-            <div class="medal">
-                <div class="medal-circle">😊
-                    <span class="medal-tooltip">Más guapo</span>
-                </div>
-            </div>
+        <div class="d-flex flex-row flex-wrap gap-3 justify-content-start">
+            {% for award in awards %}
+                {% include 'common/award_profile.html' %}
+            {% endfor %}  
         </div>
+        
+
+
         <!-- Ícono de editar en la esquina superior derecha -->
         {% if request.user == requested_profile.id_user %}
         <div class="edit-profile position-absolute">
