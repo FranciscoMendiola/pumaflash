@@ -81,48 +81,55 @@ class VotacionesView(LoginRequiredMixin, View):
     def get(self, request, code):
         active_group, active_profile = self.__validate_request(request, code)
 
-        if not Category.objects.exists():
-            return render(request, "noCategorias.html")
+        if Category.objects.exists():
+            current_category_id = request.GET.get('categoria')
+            if current_category_id:
+                current_category = get_object_or_404(
+                    Category, pk=current_category_id)
+            else:
+                current_category = Category.objects.first()
 
-        current_category_id = request.GET.get('categoria')
-        if current_category_id:
-            current_category = get_object_or_404(
-                Category, pk=current_category_id)
+            students = User.objects.filter(
+                profile__id_group=active_group, is_staff=False)
+
+            # Quitamos al estudiante actual, pero como @dannaliz está usando User en lugar de Profile entonces primero obtenemos el
+            # user del active_profile y ya luego el id del profile para quitarlo
+            if active_profile:
+                students = students.exclude(id=active_profile.id_user.id)
+
+            vote_exists = request.user.is_staff or Vote.objects.filter(
+                voting_user=request.user,
+                category=current_category
+            ).exists()
+
+            votos_totales = Vote.objects.values(
+                'category__name',
+                'voted_user__first_name',
+                'voted_user__last_name',
+                'voted_user__id'
+            ).annotate(total=Count('id_vote')).order_by('category__name', '-total')
+
+            context = {
+                "active_profile": active_profile,  # Requerido por el navbar
+                "active_group": active_group,
+                "students": students,
+                "current_category": current_category,
+                "next_category": get_next_category_id(current_category.id_category),
+                "prev_category": get_prev_category_id(current_category.id_category),
+                "has_voted": vote_exists,
+                "ranking": votos_totales,
+            }
         else:
-            current_category = Category.objects.first()
-
-        students = User.objects.filter(
-            profile__id_group=active_group, is_staff=False)
-
-        # Quitamos al estudiante actual, pero como @dannaliz está usando User en lugar de Profile entonces primero obtenemos el
-        # user del active_profile y ya luego el id del profile para quitarlo
-        if active_profile:
-            students = students.exclude(id=active_profile.id_user.id)
-
-        vote_exists = request.user.is_staff or Vote.objects.filter(
-            voting_user=request.user,
-            category=current_category
-        ).exists()
-
-        votos_totales = Vote.objects.values(
-            'category__name',
-            'voted_user__first_name',
-            'voted_user__last_name',
-            'voted_user__id'
-        ).annotate(total=Count('id_vote')).order_by('category__name', '-total')
-
-        context = {
-            "code": code,
-            "group": active_group,
-            "active_group": active_group,
-            "active_profile": active_profile,
-            "students": students,
-            "current_category": current_category,
-            "next_category": get_next_category_id(current_category.id_category),
-            "prev_category": get_prev_category_id(current_category.id_category),
-            "has_voted": vote_exists,
-            "ranking": votos_totales,
-        }
+            context = {
+                "active_profile": active_profile,  # Requerido por el navbar
+                "active_group": active_group,
+                "students": [],
+                "current_category": None,
+                "next_category": None,
+                "prev_category": None,
+                "has_voted": False,
+                "ranking": [],
+            }
         return render(request, "votaciones.html", context)
 
     def post(self, request, code):

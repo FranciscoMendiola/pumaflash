@@ -9,21 +9,35 @@
 
 <!-- Encabezado de categoría -->
 <div class="d-flex justify-content-center align-items-center mb-4 gap-3">
-  <form method="get" action="{% url 'votaciones' code=group.code %}">
+  
+
+  {% if current_category %}
+  <form method="get" action="{% url 'votaciones' code=active_group.code %}">
     <input type="hidden" name="categoria" value="{{ prev_category }}">
     <button type="submit" class="btn btn-outline-dark">&lt;</button>
   </form>
-
   <h3 class="mb-0 mx-3"> {{ current_category.name }}</h3>
-
-  <form method="get" action="{% url 'votaciones' code=group.code %}">
+  <form method="get" action="{% url 'votaciones' code=active_group.code %}">
     <input type="hidden" name="categoria" value="{{ next_category }}">
     <button type="submit" class="btn btn-outline-dark">&gt;</button>
   </form>
+  {% else %}
+  <div class="card custom-card text-center mx-auto my-4" style="width: 24rem; height: 26rem;">
+    <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+      <img
+        src="https://png.pngtree.com/png-clipart/20230315/ourmid/pngtree-dog-cute-animal-realistic-png-image_6646934.png"
+        alt="Sin categorías" class="mb-4" style="width: 350px; height: 350px; object-fit: contain;">
+      <h5 class="card-title">Sin categorías</h5>
+      <p class="card-text px-3">No se encontraron categorías disponibles en este grupo.</p>
+    </div>
+    </div>
+  {% endif %}
+
 </div>
 
 
 <!-- Tarjetas -->
+{% if current_category %}
 <div class="py-5">
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
     {% for student in students %}
@@ -42,5 +56,5 @@
     {% endfor %}
   </div>
 </div>
-
+{% endif %}
 {% endblock %}
