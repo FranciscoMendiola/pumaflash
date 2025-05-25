@@ -110,7 +110,7 @@ class VotacionesView(LoginRequiredMixin, View):
             ).annotate(total=Count('id_vote')).order_by('category__name', '-total')
 
             context = {
-                'active_profile': active_profile,  # Requerido por el navbar
+                "active_profile": active_profile,  # Requerido por el navbar
                 "active_group": active_group,
                 "students": students,
                 "current_category": current_category,
@@ -121,7 +121,7 @@ class VotacionesView(LoginRequiredMixin, View):
             }
         else:
             context = {
-                'active_profile': active_profile,  # Requerido por el navbar
+                "active_profile": active_profile,  # Requerido por el navbar
                 "active_group": active_group,
                 "students": [],
                 "current_category": None,
