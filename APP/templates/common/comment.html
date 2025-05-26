@@ -1,8 +1,27 @@
-<div class="comment">
-    <img src="{{ comment.id_sender.id_user.img_url.url }}" alt="User Pic">
-    <div class="comment-text">
-        <strong>{{ comment.id_sender.id_user.username }} {{ comment.id_sender.id_user.first_name }}</strong>
-        <br>
-         {{ comment.content }}
+<div class="d-flex align-items-start border rounded-4 p-3 mb-2 bg-light position-relative">
+    <img src="{{ comment.id_sender.id_user.img_url.url }}" alt="User Pic" class="rounded-circle me-2" style="width: 46px; height: 46px; object-fit: cover;">
+    
+    <div class="flex-grow-1">
+        <div class="d-flex justify-content-between">
+            <strong>{{ comment.id_sender.id_user.username }} {{ comment.id_sender.id_user.first_name }}</strong>
+            {% if request.user.is_staff %}
+            <div class="dropdown">
+                <a class="btn btn-link text-dark fw-bold p-0 m-0" role="button" id="dropdownMenuLink{{ comment.id }}" data-mdb-toggle="dropdown" aria-expanded="false">
+                    <strong><i class="fas fa-ellipsis-v"></i></strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink{{ comment.id }}">
+                    <li class="dropdown-item">
+                     <form action="{% url 'delete-comment' comment.id_comment %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="text-danger border-0 bg-transparent">
+                            <strong>Eliminar</strong>
+                        </button>
+                    </form>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <p class="mt-2 mb-0 text-break">{{ comment.content }}</p>
     </div>
 </div>

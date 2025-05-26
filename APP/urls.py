@@ -1,7 +1,7 @@
 # urls.py
 from django.urls import path
 from django.shortcuts import redirect
-from APP.views import AuthView, HomeView, ProfileView, AwardsView
+from APP.views import AuthView, HomeView, ProfileView, AwardsView, DeleteCommentView
 from APP.views.codes import GeneratorView, GroupsView
 from APP.views.votaciones import VotacionesView
 
@@ -15,4 +15,6 @@ urlpatterns = [
     path("profile/<str:id>", ProfileView.as_view(), name="profile"),
     path("awards/<str:code>", AwardsView.as_view(), name="awards"),
     path('votaciones/<str:code>/', VotacionesView.as_view(), name='votaciones'),
+    path('comment/<str:id>/delete/', DeleteCommentView.as_view(), name='delete-comment'),
+
 ]

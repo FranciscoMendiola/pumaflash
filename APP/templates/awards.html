@@ -6,6 +6,9 @@
 
 {% block main_content %}
 
+
+{% if awards %}
+
 <h2 class="text-center fw-bold mb-4">Premios otorgados</h2>
 
 <form method="POST" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 align-items-end"
@@ -56,16 +59,47 @@
         </div>
         {% empty %}
         <div class="card text-center w-100 py-3">
-            <div class="card-header py-3">
-                Sin resultados
-            </div>
-            <div class="card-body py-5">
-                <h5 class="card-title">No se han encontrado premios</h5>
-            </div>
-        </div>
-        {% endfor %}
+  <div class="card-header py-3 card-title">
+    <h5 class="card-title">Sin resultados</h5>
+  </div>
+  <div class="card-body py-5">
+    <div class="card custom-card text-center mx-auto my-4 w-100" style="max-width: 24rem;">
+      <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+        <img
+          src="https://th.bing.com/th/id/R.91f91650e3631254885d0258f7bc54d0?rik=UqoGubJhOK9vqA&riu=http%3a%2f%2fmiam-images.m.i.pic.centerblog.net%2f6d3e8fd7.png&ehk=4%2fTk6o0cQqTwGI22H3iB0fZ8lBwKncE4yYIJr55lUGQ%3d&risl=&pid=ImgRaw&r=0"
+          alt="Sin resultados"
+          class="img-fluid mb-4"
+          style="max-height: 250px; object-fit: contain;">
+        <p class="card-text px-3">No se encontraron estudiantes.</p>
+      </div>
+    </div>
+  </div>
+</div>
+      {% endfor %}
     </div>
 </div>
+
+{% else %}
+
+<div class="card text-center w-100 py-3">
+  <div class="card-header py-3 card-title">
+    <h5 class="card-title">Sin premios</h5>
+  </div>
+  <div class="card-body py-5">
+    <div class="card custom-card text-center mx-auto my-4 w-100" style="max-width: 24rem;">
+      <div class="card-body d-flex flex-column justify-content-center align-items-center h-100">
+        <img
+          src="https://www.racoongmbh.de/wp-content/uploads/2021/06/waschbaer.png"
+          alt="Sin premios"
+          class="img-fluid mb-4"
+          style="max-height: 250px; object-fit: contain;">
+        <p class="card-text px-3">No se encontraron premios disponibles en este grupo.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
 
 {% endblock %}
 

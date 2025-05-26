@@ -6,3 +6,6 @@ from .home import HomeView
 from .profile import ProfileView
 
 from .awards import AwardsView
+
+
+from .delete_comment import DeleteCommentView
