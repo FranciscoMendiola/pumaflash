@@ -7,15 +7,17 @@
             {% if request.user.is_staff %}
             <div class="dropdown">
                 <a class="btn btn-link text-dark fw-bold p-0 m-0" role="button" id="dropdownMenuLink{{ comment.id }}" data-mdb-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-ellipsis-v"></i>
+                    <strong><i class="fas fa-ellipsis-v"></i></strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink{{ comment.id }}">
-                     <form action="{% url 'delete-comment' comment.id_comment %}" method="POST" class="d-inline">
+                    <li class="dropdown-item">
+                     <form action="{% url 'delete-comment' comment.id_comment %}" method="POST">
                         {% csrf_token %}
-                        <button type="submit" class="dropdown-item text-danger border-0 bg-transparent">
-                            Eliminar
+                        <button type="submit" class="text-danger border-0 bg-transparent">
+                            <strong>Eliminar</strong>
                         </button>
                     </form>
+                    </li>
                 </ul>
             </div>
             {% endif %}
