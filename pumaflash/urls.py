@@ -29,3 +29,9 @@ urlpatterns = [
     path('login/', lambda request: redirect("auth"), name="login"),
     path('logout/', LogoutView.as_view(next_page='auth'), name='logout'),
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler400 = "APP.error_views.error_400_view"
+handler403 = "APP.error_views.error_403_view"
+handler404 = "APP.error_views.error_404_view"
+handler500 = "APP.error_views.error_500_view"

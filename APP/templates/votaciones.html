@@ -14,12 +14,12 @@
   {% if current_category %}
   <form method="get" action="{% url 'votaciones' code=active_group.code %}">
     <input type="hidden" name="categoria" value="{{ prev_category }}">
-    <button type="submit" class="btn btn-outline-dark">&lt;</button>
+    <button type="submit" class="btn btn-dark">&lt;</button>
   </form>
   <h3 class="mb-0 mx-3"> {{ current_category.name }}</h3>
   <form method="get" action="{% url 'votaciones' code=active_group.code %}">
     <input type="hidden" name="categoria" value="{{ next_category }}">
-    <button type="submit" class="btn btn-outline-dark">&gt;</button>
+    <button type="submit" class="btn btn-dark">&gt;</button>
   </form>
   {% else %}
           <div class="card text-center w-100 py-3">

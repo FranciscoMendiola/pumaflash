@@ -143,3 +143,8 @@ LOGIN_URL = 'auth'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 86400  # Mantener la sesión activa 24 horas
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # No cerrar sesión al cerrar navegador
+
+
+
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
