@@ -130,13 +130,11 @@ class VotacionesView(LoginRequiredMixin, View):
                 "has_voted": False,
                 "ranking": [],
             }
+
         return render(request, "votaciones.html", context)
 
     def post(self, request, code):
         active_group, active_profile = self.__validate_request(request, code)
-
-        if not Category.objects.exists():
-            return render(request, "noCategorias.html")
 
         current_category_id = request.POST.get('categoria')
         if current_category_id:

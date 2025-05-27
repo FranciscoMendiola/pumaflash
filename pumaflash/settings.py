@@ -120,7 +120,6 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
 ########################################################################
 ########################################################################
 
@@ -133,8 +132,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "APP/static",  # Esto apunta a la carpeta static/ en el raíz
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 MEDIA_URL = '/media/'
@@ -149,6 +146,7 @@ SESSION_COOKIE_AGE = 86400  # Mantener la sesión activa 24 horas
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # No cerrar sesión al cerrar navegador
 
 
-
 DEBUG = False
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

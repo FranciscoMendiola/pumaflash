@@ -1,63 +1,63 @@
+{% extends 'index.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verificación de Código - Anuario</title>
+{% block content %}
+<div class="background_login">
+  <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card p-4 shadow-4 text-center w-100" style="max-width: 600px;">
 
-  <!-- Font Awesome (para los íconos) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- MDBootstrap CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
-  
-  <!-- Tus estilos -->
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  {% block injected_css %}
-    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
-  {% endblock %}
-</head>
-<body>
-  {% block content %}
-  <div class="background_login">
-    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
-      <div class="card p-4 shadow-4 text-center" style="width: 100%; max-width: 600px; height: 90vh; overflow-y: auto;">
-
-        <div class="card-glass text-center">
-          <h2 class="fw-bold mb-4">Generar código</h2>
-          <form method="POST">
-            {% csrf_token %}
-              <label for="nombre">Nombre:</label>
-              <input type="text" name="nombre" required>
-              <button type="generar" class="btn btn-primary">Generar</button>
-          </form>
-          <hr class="my-4">
-          <h4 class="text-center">Grupos:</h4>
-          <div class="row mt-3">
-            {% for grupo in grupos %}
-              <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card custom-card h-100 shadow">
-                  <div class="card-body text-center">
-                    <h5 class="card-title">{{ grupo.group_name }}</h5>
-                      <p class="card-text"><strong>Código:</strong> {{ grupo.code }}</p>
-                      <a href="{% url 'home' grupo.code %}" class="btn btn-primary mt-2">Acceder</a>
-                  </div>
-                </div>
+      <!-- Sección de formulario -->
+      <div class="card-glass mb-4">
+        <h2 class="fw-bold mb-4">Generar código</h2>
+        <form method="POST" novalidate>
+          {% csrf_token %}
+          <div class="row justify-content-center align-items-center g-3">
+            <div class="col-md-8">
+              <div class="form-outline" data-mdb-input-init>
+                <input type="text" name="nombre" id="gName" class="form-control" required />
+                <label class="form-label" for="gName">Nombre</label>
               </div>
-            {% empty %}
-            <p class="text-muted">No hay grupos creados todavía.</p>
-          {% endfor %}
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-primary w-100">Generar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div>
+        <hr class="my-4">
+        <h4 class="text-center mb-3">Grupos:</h4>
+        <hr class="mb-4">
+      </div>
+
+      <!-- Lista de grupos -->
+      <div class="row py-2" style="max-height: 300px; overflow-y: auto;">
+        {% for grupo in grupos %}
+        <div class="col-md-6 col-lg-4 mb-4 d-flex">
+          <div class="card shadow-sm w-100 d-flex flex-column custom-card">
+            <div class="card-body d-flex flex-column justify-content-between text-center">
+              <!-- Parte superior -->
+              <div>
+                <h5 class="card-title">{{ grupo.group_name }}</h5>
+              </div>
+              <!-- Parte inferior: código y botón -->
+              <div>
+                <hr>
+                <p class="card-text mb-2 py-3"><strong><h6>Código:</h6></strong> {{ grupo.code }}</p>
+                <a href="{% url 'home' grupo.code %}" class="btn btn-primary">Acceder</a>
+              </div>
+            </div>
           </div>
         </div>
+        {% empty %}
+        <div class="col-12">
+          <p class="text-muted">No hay grupos creados todavía.</p>
+        </div>
+        {% endfor %}
       </div>
+
     </div>
   </div>
+</div>
 {% endblock %}
-    
-    <!-- Font Awesome for icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-  
-</body>
-</html>

@@ -30,8 +30,6 @@ class GeneratorView(View):
                 code=codigo,
                 id_admin=request.user
             )
-            messages.success(
-                request, f'Grupo \"{grupo.group_name}\" creado con código: {codigo}')
             return redirect('generator')
         else:
             messages.error(request, 'El nombre del grupo es obligatorio.')
@@ -62,7 +60,7 @@ class GroupsView(View):
 
             # Crear perfil si aún no tiene
             Profile.objects.create(id_user=request.user,
-                                   id_group=grupo, description='')
+                                   id_group=grupo, description='Bienvenido(a) a mi perfil, soy miembro de PumaFlash')
             return redirect('home', code=grupo.code)
         except Group.DoesNotExist:
             messages.error(
