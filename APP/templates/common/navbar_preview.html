@@ -1,0 +1,79 @@
+{% load static %}
+<!-- Navbar -->
+<nav
+  class="navbar navbar-expand-lg bg-body-tertiary bg-dark navbar-dark"
+  data-mdb-theme="dark"
+>
+  <!-- Container wrapper -->
+  <div class="container py-2">
+    <!-- Navbar brand -->
+    <a class="navbar-brand me-2" href="/generator">
+      <img
+        src="{% static 'img/favicon.ico' %}"
+        height="46"
+        alt="MDB Logo"
+        loading="lazy"
+        style="margin-top: -1px"
+      />
+      PumaFlash
+    </a>
+
+    <!-- Toggle button -->
+    <button
+      data-mdb-toggle="collapse"
+      class="navbar-toggler"
+      type="button"
+      data-mdb-target="#navbarButtonsExample"
+      aria-controls="navbarButtonsExample"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarButtonsExample">
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto  mb-lg-0">
+      </ul>
+      <!-- Left links -->
+
+      <!-- Right elements -->
+      <div class="d-flex align-items-center">
+        <!-- Avatar -->
+        <div class="dropdown">
+          <a id="navbarDropdownMenuAvatar"
+            class="dropdown-toggle d-flex align-items-center hidden-arrow"
+            data-mdb-toggle="dropdown"
+            href="#"
+            role="button"
+            aria-expanded="false">
+            <img
+              src="{{ request.user.img_url.url }}"
+              class="rounded-circle"
+              height="46"
+              width="46"
+              alt="Black and White Portrait of a Man"
+              loading="lazy"
+            />
+            <i class="fas fa-caret-down ms-2" style="color:rgb(187, 187, 187);"></i>
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="navbarDropdownMenuAvatar">
+
+            {% if request.user.is_staff %}
+            <li>
+              <a class="dropdown-item" href="/logout">Cerrar sesión</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+      <!-- Right elements -->
+    </div>
+    <!-- Collapsible wrapper -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
