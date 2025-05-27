@@ -21,6 +21,9 @@ migrations/
 # Archivos de medios y subidas (media y static en producción)
 media/  
 
+# Archivos estáticos generados para producción
+staticfiles/
+
 # Archivos de logs
 *.log
 

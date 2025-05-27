@@ -1,9 +1,10 @@
 {% load static %}
-<div class="medal text-center" style="width: 100px; height: 120px;">
-    <div class="medal-circle position-relative mx-auto" style="width: 80px; height: 80px;">
-        <img src="{{ award.id_category.img_url.url }}" class="rounded-circle w-100 h-100"
+
+
+<div class="medal">
+                <div class="medal-circle">
+                    <img src="{{ award.id_category.img_url.url }}" class="rounded-circle w-100 h-100"
             alt="Foto de {{ award.id_winner.id_user.username }}" style="object-fit: cover;">
-        <span class="medal-tooltip position-absolute top-100 start-50 translate-middle-x mt-1"
-            style="font-size: 0.75rem;">{{ award.id_category.name }}</span>
-    </div>
-</div>
+                    <span class="medal-tooltip">{{ award.id_category.name }}</span>
+                </div>
+            </div>
