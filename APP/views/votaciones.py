@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
-from APP.models import Group, Profile, User, Category, Vote, Award
+from APP.models import Group, Profile, User, Category, Award, Vote
 from django.http import HttpResponse
 
 

@@ -11,7 +11,7 @@
         <p class="card-text">{{ student.first_name }} {{ student.last_name }}</p>
         {% if not request.user.is_staff %}
         {% if not has_voted %}
-        <form method="post" class="mt-auto">
+        <form method="post">
             {% csrf_token %}
             <input type="hidden" name="categoria" value="{{ current_category.id_category }}">
             <input type="hidden" name="voted_user_id" value="{{ student.id }}">
@@ -25,3 +25,4 @@
         {% endif %}
     </div>
 </div>
+

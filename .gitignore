@@ -6,7 +6,7 @@ venv/
 .venv/
 
 # Archivos de base de datos SQLite
-*.sqlite3
+#*.sqlite3
 
 # Archivos generados por Python
 __pycache__/
@@ -19,7 +19,7 @@ migrations/
 # Nota: Descomenta la línea anterior solo si quieres excluir migraciones
 
 # Archivos de medios y subidas (media y static en producción)
-media/  
+#media/  
 
 # Archivos estáticos generados para producción
 staticfiles/

@@ -28,8 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', lambda request: redirect("auth"), name="login"),
     path('logout/', LogoutView.as_view(next_page='auth'), name='logout'),
-    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler400 = "APP.error_views.error_400_view"
 handler403 = "APP.error_views.error_403_view"
