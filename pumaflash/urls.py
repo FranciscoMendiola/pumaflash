@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.shortcuts import redirect
-from django.urls import path
+from django.urls import path, re_path
 from django.urls.conf import include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
+from django.views.static import serve
 
 from APP.views.auth import AuthView
 
@@ -28,7 +29,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', lambda request: redirect("auth"), name="login"),
     path('logout/', LogoutView.as_view(next_page='auth'), name='logout'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve, {
+        'document_root': settings.MEDIA_ROOT,
+    }),
+]
+
 
 handler400 = "APP.error_views.error_400_view"
 handler403 = "APP.error_views.error_403_view"

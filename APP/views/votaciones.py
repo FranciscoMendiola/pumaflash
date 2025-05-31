@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from APP.models import Group, Profile, User, Category, Award, Vote
 from django.http import HttpResponse
+from collections import defaultdict
 
 
 def get_prev_category_id(current_id):
@@ -38,6 +39,7 @@ def actualizaPremios(voto, active_group):
         Award.objects.create(id_winner=id_winner,
                              id_category=category, id_group=active_group)
     else:
+
         # Si ya hay uno o más premios de esta categoría y grupo tomamos el que sea de esos
         premioActual = Award.objects.filter(
             id_category=category, id_group=active_group).first()
@@ -60,21 +62,24 @@ def actualizaPremios(voto, active_group):
         if numVotosCandidato == numVotosGanador:
             id_winner = Profile.objects.get(
                 id_user=votado, id_group=active_group)
-            Award.objects.create(id_winner=id_winner,
-                                 id_category=category, id_group=active_group)
+
+            # Verificamos si ya existe un premio para este ganador en esta categoría y grupo
+            if not Award.objects.filter(id_winner=id_winner, id_category=category, id_group=active_group).exists():
+                Award.objects.create(id_winner=id_winner,
+                                     id_category=category, id_group=active_group)
             return
-        # 3.- Si el candidato supera al ganador actual, entonces borramos todos los premios de esta categoría y grupo
-        # y creamos uno nuevo con el nuevo ganador
-        if numVotosCandidato > numVotosGanador:
-            # Este if ya no es necesario por tricotomía pero lo dejo por el flujo más sencillo
-            # Borramos todos los premios de esta categoría y grupo
-            Award.objects.filter(
-                id_category=category, id_group=active_group).delete()
-            # Creamos el nuevo premio
-            id_winner = Profile.objects.get(
-                id_user=votado, id_group=active_group)
-            Award.objects.create(id_winner=id_winner,
-                                 id_category=category, id_group=active_group)
+    # 3.- Si el candidato supera al ganador actual, entonces borramos todos los premios de esta categoría y grupo
+    # y creamos uno nuevo con el nuevo ganador
+    if numVotosCandidato > numVotosGanador:
+        # Este if ya no es necesario por tricotomía pero lo dejo por el flujo más sencillo
+        # Borramos todos los premios de esta categoría y grupo
+        Award.objects.filter(
+            id_category=category, id_group=active_group).delete()
+        # Creamos el nuevo premio
+        id_winner = Profile.objects.get(
+            id_user=votado, id_group=active_group)
+        Award.objects.create(id_winner=id_winner,
+                             id_category=category, id_group=active_group)
 
 
 class VotacionesView(LoginRequiredMixin, View):
@@ -92,8 +97,6 @@ class VotacionesView(LoginRequiredMixin, View):
             students = User.objects.filter(
                 profile__id_group=active_group, is_staff=False)
 
-            # Quitamos al estudiante actual, pero como @dannaliz está usando User en lugar de Profile entonces primero obtenemos el
-            # user del active_profile y ya luego el id del profile para quitarlo
             if active_profile:
                 students = students.exclude(id=active_profile.id_user.id)
 
@@ -110,7 +113,7 @@ class VotacionesView(LoginRequiredMixin, View):
             ).annotate(total=Count('id_vote')).order_by('category__name', '-total')
 
             context = {
-                "active_profile": active_profile,  # Requerido por el navbar
+                "active_profile": active_profile,
                 "active_group": active_group,
                 "students": students,
                 "current_category": current_category,
@@ -121,7 +124,7 @@ class VotacionesView(LoginRequiredMixin, View):
             }
         else:
             context = {
-                "active_profile": active_profile,  # Requerido por el navbar
+                "active_profile": active_profile,
                 "active_group": active_group,
                 "students": [],
                 "current_category": None,
@@ -130,6 +133,26 @@ class VotacionesView(LoginRequiredMixin, View):
                 "has_voted": False,
                 "ranking": [],
             }
+
+        # ✅ Recuento de votos por categoría
+        # votos_por_categoria = Vote.objects.values(
+        #    'category__name',
+        #    'category__id_category',
+        #    'voted_user__first_name',
+        #    'voted_user__last_name',
+        #    'voted_user__id'
+        # ).annotate(total=Count('id_vote')).order_by('category__id_category', '-total')
+#
+        # print("\n===== RECUENTO DE VOTOS POR CATEGORÍA =====")
+        # categoria_actual = None
+        # for voto in votos_por_categoria:
+        #    nombre_categoria = voto['category__name']
+        #    if nombre_categoria != categoria_actual:
+        #        print(f"\nCategoría: {nombre_categoria}")
+        #        categoria_actual = nombre_categoria
+        #    print(
+        #        f"  {voto['voted_user__id']} {voto['voted_user__first_name']} {voto['voted_user__last_name']}: {voto['total']} votos")
+        # print("============================================\n")
 
         return render(request, "votaciones.html", context)
 
