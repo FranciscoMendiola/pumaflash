@@ -36,11 +36,16 @@ conda env create -f environment.yml
 conda activate pumaflash
 ```
 
-### 4. Aplicar migraciones y ejecutar servidor
+### 4. Aplicar migraciones
 
 ```bash
 python manage.py makemigrations APP
 python manage.py migrate
+```
+### 5. Ejecutar servidor
+
+```bash
+python manage.py collectstatic
 python manage.py runserver
 ```
 
