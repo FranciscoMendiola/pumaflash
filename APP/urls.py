@@ -1,21 +1,20 @@
+# urls.py
 from django.urls import path
-from . import views
+from django.shortcuts import redirect
+from APP.views import AuthView, HomeView, ProfileView, AwardsView, DeleteCommentView
+from APP.views.codes import GeneratorView, GroupsView
+from APP.views.votaciones import VotacionesView
+
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("equipo_n/", views.equipo_n, name="equipo_n"),
-    path("ekiposupercool/", views.ekiposupercool, name ="ekiposupercool"),
-    path("ekuipo/", views.ekuipo, name="ekuuipo"),        
-    path("Space4Equipo/", views.space4, name="space4"),
-    path("equipoDinamita/", views.ejercicio1, name="Dinamita"),
-    path("Labubusalvaje/", views.Labubusalvajes, name="Labubusalvaje"),
-    path("cums/", views.cums, name="Cumis"),
-    path("tontines/", views.tontines, name="Tonotos"),
-    path("equipofoo/", views.foo, name="foo"),
-    path("equipous/", views.us, name="us"),
-    path("MiPrimerURL/", views.indez, name="zedni"),
-    path("equipoPerdido1/", views.equipoPerdido1, name="equipoPerdido1"),
-    path("URL/", views.URLEquipo, name="url"),
-    path("ekipo/", views.ekipo, name="equipoPerdido1")
- ]
+    path("", lambda request: redirect("auth"), name="root"),
+    path("auth/", AuthView.as_view(), name="auth"),
+    path("home/<str:code>/", HomeView.as_view(), name="home"),
+    path("generator/", GeneratorView.as_view(), name="generator"),
+    path("groups/", GroupsView.as_view(), name="groups"),
+    path("profile/<str:id>", ProfileView.as_view(), name="profile"),
+    path("awards/<str:code>", AwardsView.as_view(), name="awards"),
+    path('votaciones/<str:code>/', VotacionesView.as_view(), name='votaciones'),
+    path('comment/<str:id>/delete/', DeleteCommentView.as_view(), name='delete-comment'),
 
+]

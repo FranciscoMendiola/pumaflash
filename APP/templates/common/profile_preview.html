@@ -1,0 +1,17 @@
+{% load static %}
+
+<div class="card h-100 d-flex flex-column custom-card">
+    <a href="{% url 'profile' profile.pk %}" class="circle-image">
+        <img src="{{ profile.id_user.img_url.url }}" 
+             class="card-img-top w-100 h-100 rounded-circle" 
+             alt="Foto de {{ profile.id_user.username }}" >
+    </a>
+    <div class="card-body d-flex flex-column">
+        <hr>
+        <h5 class="card-title">{{ profile.id_user.username }}</h5>
+        <p class="card-text">{{ profile.id_user.first_name }} {{ profile.id_user.last_name }}</p>
+        <div class="mt-auto">
+            <a href="{% url 'profile' profile.pk %}" class="btn btn-dark">Ver Perfil</a>
+        </div>
+    </div>
+</div>

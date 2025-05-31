@@ -6,19 +6,19 @@
 
 ## Funcionalidades Principales
 
-* Gestión de perfiles de estudiantes, docentes y grupos.
-* Búsqueda y filtrado de perfiles.
-* Interfaz web responsiva.
-* Configuración de datos sensibles mediante variables de entorno.
+- Gestión de perfiles de estudiantes, docentes y grupos.
+- Búsqueda y filtrado de perfiles.
+- Interfaz web responsiva.
+- Configuración de datos sensibles mediante variables de entorno.
 
 ## Tecnologías Utilizadas
 
-* **Python 3.10**: Lenguaje principal.
-* **Django**: Framework backend.
-* **MySQL**: Sistema de gestión de base de datos (opcional, configurable).
-* **django-crispy-forms**: Mejora el diseño y manejo de formularios.
-* **django-environ**: Facilita el uso de variables de entorno.
-* **Miniconda**: Manejo del entorno virtual.
+- **Python 3.10**: Lenguaje principal.
+- **Django**: Framework backend.
+- **MySQL**: Sistema de gestión de base de datos (opcional, configurable).
+- **django-crispy-forms**: Mejora el diseño y manejo de formularios.
+- **django-environ**: Facilita el uso de variables de entorno.
+- **Miniconda**: Manejo del entorno virtual.
 
 ## Instalación
 
@@ -36,22 +36,16 @@ conda env create -f environment.yml
 conda activate pumaflash
 ```
 
-### 3. Configurar entorno
-
-Crea un archivo `.env` en la raíz del proyecto con la configuración necesaria. Ejemplo:
-
-```env
-DEBUG=True
-SECRET_KEY=tu_clave_secreta
-DATABASE_URL=mysql://usuario:contraseña@localhost:3306/pumaflash
-```
-
-Si no usas MySQL, puedes omitir `DATABASE_URL` para utilizar SQLite por defecto.
-
-### 4. Aplicar migraciones y ejecutar servidor
+### 4. Aplicar migraciones
 
 ```bash
+python manage.py makemigrations APP
 python manage.py migrate
+```
+### 5. Ejecutar servidor
+
+```bash
+python manage.py collectstatic
 python manage.py runserver
 ```
 

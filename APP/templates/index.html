@@ -1,27 +1,73 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Page Title</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PumaFlash</title>
+  <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+  <!-- Font Awesome (para los iconos) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- MDBootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  {% block injected_css %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+  {% endblock %}
 </head>
 <body>
+  {% block content %}
+  <div class="background_login">
+  <!-- Meter toda la plantilla bootstrap en una card centrada-->
+   <!-- min-vh-100 es para que se ajuste a la pantalla al inicio pero pueda crecer después-->
+  <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card p-4 shadow-4" style="width: 100%; max-width: 600px;">
+      <!-- Pills navs  (botones para vistas que cambian)-->
+      <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <!-- Como le pasamos un formulario django descompone todas sus tuplas para poder usarlas, active_tab es la pestaña actual activa-->
+           <!-- Entonces esos if con active_tab son solo para elegir el botón que por defecto está "activo" es decir que tiene el color de seleccionado y la funcioanlidad-->
+          <a class="nav-link {% if active_tab == 'login' %}active{% endif %}" id="tab-login" data-mdb-toggle="pill" href="#pills-login" role="tab"
+    aria-controls="pills-login" aria-selected="{% if active_tab == 'login' %}true{% else %}false{% endif %}">Iniciar Sesión</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link {% if active_tab == 'register' %}active{% endif %}" id="tab-register" data-mdb-toggle="pill" href="#pills-register" role="tab"
+    aria-controls="pills-register" aria-selected="{% if active_tab == 'register' %}true{% else %}false{% endif %}">Registrarse</a>
+        </li>
+      </ul>
 
-<h1>Ingeniería de software </h1>
-<h4>Equipo Vaquero</h4>
 
-<p> Cosulta 1 </p>
-<hr>
-<!--Aquí va tu consulta-->
+      <!-- Pills content -->
+      <div class="tab-content">
 
-<p> Cosulta 2 </p>
-<hr>
-<!--Aquí va tu consulta-->
+        {% if messages %}
+          {% for message in messages %}
+              <div class="alert {% if 'error' in message.tags %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}" role="alert">
+                <strong>{{ message }}</strong>
+              </div>
+          {% endfor %}
+        {% endif %}
 
+        <!-- Lo mismo para la pantalla show active por defecto, que no muestre por defecto al login si hubo error en el registro-->
+        <div class="tab-pane fade {% if active_tab == 'login' %}show active{% endif %}" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+          {% include "registration/login.html" %}
+        </div>
+        
+        <div class="tab-pane fade {% if active_tab == 'register' %}show active{% endif %}" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+          {% include "registration/registration.html" %}
+        </div>
 
-<p> Cosulta 3 </p>
-<hr>
-<!--Aquí va tu consulta-->
-
-
-
+      </div>
+    </div>
+  </div>
+  </div>
+  {% endblock %}
+   <!-- MDBootstrap JS para poder cambiar de vistas con INICIAR SESIÓN o REGISTRARSE -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
+   <script src="{% static 'js/scripts.js' %}"></script>
+   {% block injected_js %}
+     <script src="{% static 'js/auth.js' %}"></script>
+   {% endblock %}
 </body>
 </html>

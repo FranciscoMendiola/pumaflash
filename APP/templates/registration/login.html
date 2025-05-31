@@ -1,0 +1,26 @@
+<form method="POST" action="{% url 'auth' %}" enctype="multipart/form-data"> <!-- Boton submit actualmente lleva a la url con nombre index-->
+
+  <input type="hidden" name="tipoFormulario" value="login">
+
+  <div class="text-center mb-3">
+        <p>!Bienvenido a <strong>PumaFlash</strong>¡</p>
+  </div>
+
+  {% csrf_token %}
+    <!-- Email input -->
+    <div data-mdb-input-init class="form-outline mb-4">
+      <input type="email" id="registerEmail" name="email" class="form-control" 
+      value="{{ login_form.data.email|default_if_none:'' }}" />
+        <label class="form-label" for="registerEmail">Correo</label>
+    </div>
+
+    <!-- Password input -->
+    <div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
+      <input type="password" id="loginPassword" name="password" class="form-control password-input" />
+      <label class="form-label" for="loginPassword">Contraseña</label>
+      <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
+    </div>
+
+    <!-- Submit button -->
+    <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Iniciar Sesión</button>
+  </form>

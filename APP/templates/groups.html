@@ -1,0 +1,49 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<div class="background_login">
+  <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card p-4 shadow-4" style="width: 100%; max-width: 500px;">
+
+      <!-- Encabezado -->
+      <div class="text-center mb-3">
+        <p>Ingresa el código para acceder a <strong>PumaFlash</strong></p>
+      </div>
+
+      <!-- Formulario -->
+      <form method="POST">
+        {% csrf_token %}
+        <div class="col">
+          <div class="form-outline" data-mdb-input-init>
+            <input type="text" name="code" id="code" class="form-control" required/>
+            <label class="form-label" for="code">Código</label>
+          </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary btn-block w-100 mb-3">Enviar</button>
+
+        {% if messages %}
+        <div class="text-start">
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </form>
+
+      {% if grupo %}
+      <hr>
+      {% if grupo.nombre %}
+      <p><strong>Nombre:</strong> {{ grupo.nombre }}</p>
+      <p><strong>Código:</strong> {{ grupo.code }}</p>
+      <a href="{% url 'home' grupo.code %}" class="btn btn-primary mt-2">Acceder</a>
+      {% else %}
+      <p><strong>Código:</strong> {{ grupo.code }}</p>
+      <p class="text-warning">Este código no tiene nombre asignado.</p>
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

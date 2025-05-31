@@ -1,0 +1,154 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block injected_css %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<!-- Card Wrapper -->
+<div class="card position-relative">
+    <!-- Profile Info as Card Header -->
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col-3 col-md-2 text-center">
+                <img src="{{ requested_profile.id_user.img_url.url }}" alt="Profile Picture" class="profile-pic">
+            </div>
+            <div class="col-9 col-md-10">
+                <h4 class="username">{{ requested_profile.id_user.username }}</h4>
+                <p class="full-name">{{ requested_profile.id_user.first_name }} {{ requested_profile.id_user.last_name }}</p>
+                <p class="description">"{{ requested_profile.description }}"</p>
+            </div>
+        </div>
+        <!-- Medals Section -->
+        <!-- Medals Section -->
+            <div class="medals-section">
+                {% for award in awards %}
+                {% include 'common/award_profile.html' %}
+            {% endfor %}
+            </div>
+        
+
+
+        <!-- Ícono de editar en la esquina superior derecha -->
+        {% if request.user == requested_profile.id_user %}
+        <div class="edit-profile position-absolute">
+            <a data-mdb-toggle="modal" data-mdb-target="#editProfileModal" title="Editar perfil">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Card Body -->
+    <div class="card-body">
+        <!-- Comments Section -->
+        <div class="comments-section">
+            <div class="comments-box">
+                <h6>Comentarios</h6>
+                <div class="comments-list">
+                    {% for comment in comments %}
+                    {% include "common/comment.html" %}
+                    {% empty %}
+                    <div class="text-center w-100 py-3">
+                        <div class="card-body py-5">
+                            <h5 class="card-title">Sin comentarios</h5>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if not request.user.is_staff %}
+            <!-- Formulario para enviar comentario -->
+            <form method="POST" action="" id="commentForm" class="send-comment-box d-flex gap-3">
+                <input type="hidden" name="tipoFormulario" value="comment">
+                {% csrf_token %}
+                <img src="{{ user.img_url.url }}" alt="User Pic" class="rounded-circle">
+                <div contenteditable="true" class="form-control content-editable" id="editableDiv" placeholder="Escribe un comentario..."></div>
+                <input type="hidden" name="content" id="hiddenContentInput">
+                <button class="btn btn-dark">Enviar</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal de edición de perfil -->
+<div class="modal" tabindex="-1" id="editProfileModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Perfil</h5>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if 'error' in message.tags %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}" role="alert">
+                            <strong>{{ message }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="tipoFormulario" value="editProfile">
+                    {% csrf_token %}
+                    <!-- Nombre input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" id="editName" name="username" class="form-control"
+                               value="{{ request.user.username | default_if_none:'' }}" />
+                        <label class="form-label required" for="editName">Nombre(s)</label>
+                    </div>
+                    <!-- Apellido Paterno input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" id="apPat" name="first_name" class="form-control"
+                               value="{{ request.user.first_name | default_if_none:'' }}" />
+                        <label class="form-label required" for="apPat">Apellido paterno</label>
+                    </div>
+                    <!-- Apellido Materno input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" id="apMat" name="last_name" class="form-control"
+                               value="{{ request.user.last_name | default_if_none:'' }}" />
+                        <label class="form-label required" for="apMat">Apellido materno</label>
+                    </div>
+                    <!-- Descripción input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" id="description" name="description" class="form-control"
+                               value="{{ active_profile.description | default_if_none:'' }}" />
+                        <label class="form-label required" for="description">Descripción</label>
+                    </div>
+                    <!-- Cambiar contraseña -->
+                    <div class="text-start mb-2">
+                        Cambiar contraseña
+                    </div>
+                    <!-- Contraseña actual input -->
+                    <div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
+                        <input type="password" id="registerPassword" name="current_password" class="form-control password-input"/>
+                        <label class="form-label" for="registerPassword">Contraseña actual</label>
+                        <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
+                    </div>
+                    <!-- Nueva contraseña input -->
+                    <div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
+                        <input type="password" id="registerPassword" name="new_password" class="form-control password-input"/>
+                        <label class="form-label" for="registerPassword">Nueva contraseña</label>
+                        <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
+                    </div>
+                    <!-- Imagen input -->
+                    <div class="mb-4">
+                        <label for="img_url" class="form-label">Imagen de perfil</label>
+                        <input class="form-control" type="file" id="img_url" name="img_url" accept="image/*"/>
+                    </div>
+                    <div class="required text-start mb-2">
+                      Datos obligatorios
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="close-edit" name="tipoBoton" value="close" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+                        <button type="submit" name="tipoBoton" value="save" class="btn btn-primary" data-mdb-ripple-init>Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block injected_js %}
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

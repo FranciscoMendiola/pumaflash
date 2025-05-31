@@ -1,0 +1,67 @@
+<form method="POST" action="{% url 'auth' %}" enctype="multipart/form-data">
+  <!-- Etiqueta oculta para diferencias los distintos post -->
+  <input type="hidden" name="tipoFormulario" value="register">
+
+  <div class="text-center mb-3">
+        <p>Ingresa tus datos para registrarte en <strong>PumaFlash</strong></p>
+  </div>
+
+  {% csrf_token %}
+<!-- Nombre input -->
+<div data-mdb-input-init class="form-outline mb-4">
+  <input type="text" id="registerName" name="username" class="form-control"
+         value="{{ user_form.data.username|default_if_none:'' }}" />
+  <label class="form-label required" for="registerName">Nombre(s)</label>
+</div>
+
+<!-- Apellido Paterno input -->
+<div data-mdb-input-init class="form-outline mb-4">
+  <input type="text" id="apPat" name="first_name" class="form-control"
+         value="{{ user_form.data.first_name|default_if_none:'' }}" />
+  <label class="form-label required" for="apPat">Apellido paterno</label>
+</div>
+
+<!-- Apellido Materno input -->
+<div data-mdb-input-init class="form-outline mb-4">
+  <input type="text" id="apMat" name="last_name" class="form-control"
+         value="{{ user_form.data.last_name|default_if_none:'' }}" />
+  <label class="form-label required" for="apMat">Apellido materno</label>
+</div>
+
+<!-- Email input -->
+<div data-mdb-input-init class="form-outline mb-4">
+  <input type="email" id="registerEmail" name="email" class="form-control"
+         value="{{ user_form.data.email|default_if_none:'' }}" />
+  <label class="form-label required" for="registerEmail">Correo</label>
+</div>
+
+ <!-- Password input -->
+ <div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
+  <input type="password" id="registerPassword" name="password" class="form-control password-input"/>
+  <label class="form-label required" for="registerPassword">Contraseña</label>
+  <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
+
+</div>
+
+  <!-- Confirmar Contraseña -->
+<div data-mdb-input-init class="form-outline mb-4 password-container position-relative">
+  <input type="password" id="confirmPassword" name="confirm_password" class="form-control password-input"/>
+  <label class="form-label required" for="confirmPassword">Confirmar contraseña</label>
+  <i class="fas fa-eye position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer toggle-password"></i>
+
+</div>
+
+<!-- Imagen input -->
+<div class="mb-4">
+<label for="img_url" class="form-label">Imagen de perfil</label>
+<input class="form-control" type="file" id="img_url" name="img_url" accept="image/*">
+</div>
+
+<!-- Fecha de nacimiento input -->
+
+<div class="required text-start mb-2">
+  Datos obligatorios
+</div>
+  <!-- Submit button -->
+  <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3">Registrarse</button>
+</form>
